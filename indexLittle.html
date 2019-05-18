@@ -1,0 +1,1653 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/runNum/runNum.js"></script>
+    <!-- 引入echart.js, 3.0的版本 -->
+    <script src="js/echarts.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+<div class="container">
+    <div class="home_head">
+        <div class="home_head_date">
+            2018年12月12日 星期三
+        </div>
+    </div>
+    <div class="home_left_box1">
+        <div class="home_left_title1">平台用户情况</div>
+        <div class="home_left_legend1" id="homeLeftLegend1">
+            <div class="home_left_legend1_item">
+                <div class="home_left_legend1_icon1"></div>
+                <div class="home_left_legend1_title">注册用户</div>
+                <div class="home_left_legend1_value">0</div>
+            </div>
+            <div class="home_left_legend1_item">
+                <div class="home_left_legend1_icon2"></div>
+                <div class="home_left_legend1_title">认证用户</div>
+                <div class="home_left_legend1_value">0</div>
+            </div>
+            <div class="home_left_legend1_item">
+                <div class="home_left_legend1_icon3"></div>
+                <div class="home_left_legend1_title">实名用户</div>
+                <div class="home_left_legend1_value">0</div>
+            </div>
+        </div>
+        <div class="home_left_chart1">
+            <div id="home_left_chart1"></div>
+            <div class="home_left_chart1_label">
+                <div class="home_left_label1_1">注册用户</div>
+                <div class="home_left_label1_2" id="registorCount">0</div>
+            </div>
+        </div>
+    </div>
+    <div class="home_left_box2">
+        <div class="home_left_title2">诉求数量警种分类</div>
+        <div class="home_left_legend2" id="homeLeftLegend2">
+        </div>
+        <div id="home_left_chart2"></div>
+    </div>
+    <div class="home_map_box">
+        <div class="home_map_title1">总访问量</div>
+        <ul id="home_map_count" class="runNum"></ul>
+        <div class="home_map_title2"> 事项及诉求受理量分布</div>
+        <div id="main"></div>
+        <div id="center_bar"></div>
+    </div>
+    <div class="home_right_box1">
+        <div class="home_right_title">事项受理情况</div>
+        <div class="home_right_1">
+            <div class="home_right_item1">
+                <div class="home_right_item1_title">首次申领<br/>居民身份证</div>
+                <div class="home_right_item1_count">0</div>
+            </div>
+            <div class="home_right_item2">
+                <div class="home_right_item2_title">夫妻投靠</div>
+                <div class="home_right_item2_count">0</div>
+            </div>
+            <div class="home_right_item3">
+                <div class="home_right_item3_title">申请临时身份证</div>
+                <div class="home_right_item3_count">0</div>
+            </div>
+            <div class="home_right_item4">
+                <div class="home_right_item4_title">换领居民身份证</div>
+                <div class="home_right_item4_count">0</div>
+            </div>
+            <div class="home_right_item5">
+                <div class="home_right_item5_title">居民身份证<br/>挂失申报</div>
+                <div class="home_right_item5_count">0</div>
+            </div>
+            <div class="home_right_item6">
+                <div class="home_right_item6_title">现役干部转改<br/>文职人员落户</div>
+                <div class="home_right_item6_count">0</div>
+            </div>
+            <div class="home_right_item7">
+                <div class="home_right_item7_title">公民收养入户</div>
+                <div class="home_right_item7_count">0</div>
+            </div>
+            <div class="home_right_item8">
+                <div class="home_right_item8_title">居民身份证<br/>挂失申报</div>
+                <div class="home_right_item8_count">0</div>
+            </div>
+        </div>
+    </div>
+    <div class="home_right_box2">
+        <div class="home_right_title">近七日事项及诉求数量情况</div>
+        <div id="home_right_chart2"></div>
+    </div>
+    <div class="home_right_box3">
+        <div class="home_right_title">事项列表</div>
+        <div id="home_right_chart3">
+            <div class="home_right_tb_head">
+                <div class="sxlx">事项类型</div>
+                <div class="czr">操作人</div>
+                <div class="sj">时间</div>
+            </div>
+            <div class="home_right_tb_body">
+                <div class="home_right_tb_container" id="right_tb"></div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+<style>
+    @font-face{
+        font-family: 'DIN-D';
+        src: url('font/DIN-Black.eot');
+        src: url('font/DIN-Black.woff') format('woff'),
+            url('font/DIN-Black.ttf') format('truetype'),
+            url('font/DIN-Black.svg') format('svg');
+    }
+    body{
+        padding:0;
+        margin:0;
+        width:7680px;
+        height:3240px;
+    }
+    .container{
+        background-image: url('images/map_bg.png');
+        background-size:100% 100%;
+        background-repeat:no-repeat no-repeat;/*注意：最高权重必须要给，不然样式会被覆盖掉*/
+        background-position:center center;
+        position:relative;
+        width:100%;
+        height:100%;
+        margin:0;
+        padding:0;
+    }
+    .home_head{
+        position:relative;
+        height:285px;
+        background-image: url('images/home_head.png');
+        background-size:3840px 237px;
+        background-repeat:no-repeat no-repeat;/*注意：最高权重必须要给，不然样式会被覆盖掉*/
+        background-position:center center;
+        position:relative;
+    }
+    .home_head_date{
+        padding-top:86px;
+        padding-left:91px;
+        font-size:54px;
+        font-weight:400;
+        color:rgba(255,255,255,1);
+    }
+    .home_left_box1{
+        position:absolute;
+        width:1746px;
+        height:1362px;
+        top:368px;
+        left:88px;
+        background-image: url('images/home_left_bg1.png');
+        background-size:100% 100%;
+        background-repeat:no-repeat no-repeat;
+        background-position:center center;
+    }
+    .home_left_box2{
+        position:absolute;
+        width:1753px;
+        height:1335px;
+        bottom:87px;
+        left:98px;
+        background-image: url('images/home_left_bg2.png');
+        background-size:100% 100%;
+        background-repeat:no-repeat no-repeat;
+        background-position:center center;
+    }
+    .home_map_box{
+        position:absolute;
+        width:3752px;
+        height:2769px;
+        top:390px;
+        left:1963px;
+        background-image: url('images/map_box_bg.png');
+        background-size:100% 100%;
+        background-repeat:no-repeat no-repeat;
+        background-position:center center;
+    }
+    .home_right_box1{
+        position:absolute;
+        width:1777px;
+        height:857px;
+        top:288px;
+        right:48px;
+        background-image: url('images/home_right_bg2.png');
+        background-size:100% 100%;
+        background-repeat:no-repeat no-repeat;
+        background-position:center center;
+    }
+    .home_right_box2{
+        position:absolute;
+        width:1772px;
+        height:986px;
+        top:1228px;
+        right:53px;
+        background-image: url('images/home_right_bg.png');
+        background-size:100% 100%;
+        background-repeat:no-repeat no-repeat;
+        background-position:center center;
+    }
+    .home_right_box3{
+        position:absolute;
+        width:1777px;
+        height:857px;
+        bottom:87px;
+        right:48px;
+        background-image: url('images/home_right_bg2.png');
+        background-size:100% 100%;
+        background-repeat:no-repeat no-repeat;
+        background-position:center center;
+    }
+    .tooltip_box1{
+        margin-left:-157px;
+        margin-top: -190px;
+        width:266px;
+        height:162px;
+        background-image: url('images/tooltip_line_bg.png');
+        background-size:100% 100%;
+        background-repeat:no-repeat no-repeat;
+        background-position:center center;
+    }
+    .tooltip_box1_label{
+        padding-top:44px;
+        text-align: center;
+        font-size:48px;
+        font-family:DIN-D;
+        font-weight:normal;
+        color:rgba(255,255,255,1);
+        line-height: 44px;
+    }
+    .tooltip_box{
+        margin-left:-272px;
+        margin-top: -330px;
+        width:484px;
+        height:289px;
+        background-image: url('images/tooltip_bg.png');
+        background-size:100% 100%;
+        background-repeat:no-repeat no-repeat;
+        background-position:center center;
+    }
+    .t_item1,.t_item2{
+        height:40px;
+        padding-left:108px;
+        position:relative;
+    }
+    .t_item1{
+        padding-top:60px;
+    }
+    .t_item2{
+        padding-top:60px;
+    }
+    .t_icon1{
+        position:absolute;
+        left:59px;
+        top:53px;
+        width:24px;
+        height:24px;
+        border-radius: 24px;
+        background:#2476FA;
+        z-index: 2;
+    }
+    .t_icon2{
+        position:absolute;
+        left:59px;
+        top:53px;
+        width:24px;
+        height:24px;
+        border-radius: 24px;
+        background:#FA9B2F;
+        z-index: 2;
+    }
+    .t_item_label{
+        font-size:42px;
+        font-weight:400;
+        color:rgba(255,255,255,1);
+        opacity:0.6;
+        z-index: 1;
+    }
+    .home_map_title1{
+        top:125px;
+        left:134px;
+        position:absolute;
+        line-height: 70px;
+        font-size:72px;
+        font-family:SourceHanSansSC-Bold;
+        font-weight:bold;
+        color:rgba(50,235,228,1);
+    }
+    .home_map_title2{
+        top:1752px;
+        left:146px;
+        position:absolute;
+        line-height: 70px;
+        font-size:72px;
+        font-family:SourceHanSansSC-Bold;
+        font-weight:bold;
+        color:rgba(50,235,228,1);
+    }
+    .runNum{
+        padding: 0;
+        overflow: hidden;
+        height: 199px;
+        line-height: 199px;
+        text-align: center;
+        font-weight: bold;
+        position: relative;
+        font-size: 129px;
+        color: rgba(206,251,254,1);
+        margin-top:249px;
+        margin-left:141px;
+    }
+    .runNum>li{
+        list-style: none;
+        width: 176px;
+        float: left;
+        position: absolute;
+        background-image: url('images/home_map_count.png');
+        background-size:1059px 199px;
+        background-repeat:no-repeat repeat;
+        background-position:20px 0;
+    }
+    .home_left_title1{
+        position:absolute;
+        left:163px;
+        top:219px;
+        font-size:66px;
+        font-weight:bold;
+        color:rgba(50,235,228,1);
+        line-height:117px;
+        text-align: center;
+        background:rgba(10,46,65,0.5);
+        width:574px;
+        height:117px;
+    }
+    .home_left_chart1{
+        width:600px;
+        height:600px;
+        position:absolute;
+        left:145px;
+        top:538px;
+    }
+    .home_left_chart1_label{
+        height:122px;
+        position:absolute;
+        top:50%;
+        left:0;
+        right:0;
+        text-align: center;
+        margin-top:-61px;
+    }
+    .home_left_label1_1{
+        font-size:52px;
+        color:rgba(50,235,228,1);
+        line-height: 50px;
+        padding-bottom:34px;
+    }
+    .home_left_label1_2{
+        font-size:52px;
+        font-family:'DIN-D';
+        font-weight:400;
+        color:rgba(255,255,255,1);
+        line-height: 38px;
+    }
+    .home_left_legend1{
+        position:absolute;
+        left:891px;
+        top:90px;
+        right:0;
+    }
+    .home_left_legend1_item{
+        position:relative;
+        margin-top:156px;
+        padding-left:281px;
+        height:226px;
+    }
+    .home_left_legend1_icon1{
+        position:absolute;
+        left:0;
+        top:0;
+        width:198px;
+        height:225px;
+        background-image: url('images/home_icon_registor.png');
+        background-size:198px 225px;
+        background-repeat:no-repeat no-repeat;
+        background-position:0px 0;
+    }
+    .home_left_legend1_icon2{
+        position:absolute;
+        left:0;
+        top:0;
+        width:198px;
+        height:225px;
+        background-image: url('images/home_icon_confirm.png');
+        background-size:198px 225px;
+        background-repeat:no-repeat no-repeat;
+        background-position:0px 0;
+    }
+    .home_left_legend1_icon3{
+        position:absolute;
+        left:0;
+        top:0;
+        width:198px;
+        height:225px;
+        background-image: url('images/home_icon_real.png');
+        background-size:198px 225px;
+        background-repeat:no-repeat no-repeat;
+        background-position:0px 0;
+    }
+    .home_left_legend1_title{
+        font-size:60px;
+        line-height: 60px;
+        font-weight:bold;
+        color:#fff;
+        padding-bottom:65px;
+    }
+    .home_left_legend1_value{
+        font-size:120px;
+        line-height:100px;
+        font-family: DIN-D;
+        font-weight: bold;
+        color:#fff;
+        height:100px;
+        overflow: hidden;
+        display: block;
+        position:relative;
+        padding:0;
+        margin:0;
+    }
+    .home_left_legend1_value>li{
+        list-style: none;
+        width: 70px;
+        float: left;
+        position: absolute;
+        text-align: center;
+    }
+    .home_left_title2{
+        position:absolute;
+        left:112px;
+        top:105px;
+        font-size:66px;
+        font-weight:bold;
+        color:rgba(50,235,228,1);
+        line-height:117px;
+        text-align: center;
+        background:rgba(10,46,65,0.5);
+        width:656px;
+        height:117px;
+    }
+    .home_left_legend2{
+        position:absolute;
+        left:902px;
+        top:27px;
+        right:0;
+    }
+    .home_left_legend2_item{
+        position:relative;
+        margin-top:80px;
+        height:46px;
+    }
+    .home_left_legend2_icon{
+        position:absolute;
+        left:0;
+        top:1px;
+        width:84px;
+        height:44px;
+        background:#fff;
+    }
+    .home_left_legend2_title{
+        position:absolute;
+        left:118px;
+        top:0px;
+        width:255px;
+        height:46px;
+        font-size:48px;
+        line-height:46px;
+        color:#25D4F7;
+    }
+    .home_left_legend2_value{
+        position:absolute;
+        left:373px;
+        top:0px;
+        width:240px;
+        height:46px;
+        font-size:48px;
+        line-height:46px;
+        color:#fff;
+    }
+    .home_left_legend2_persent{
+        position:absolute;
+        left:613px;
+        top:0px;
+        right:30px;
+        height:46px;
+        font-size:48px;
+        line-height:46px;
+        color:#fff;
+    }
+    .home_right_title{
+        position:absolute;
+        left:113px;
+        top:34px;
+        height:63px;
+        line-height: 63px;
+        font-size:66px;
+        font-weight: bold;
+        color:#32EBE4;
+    }
+    .home_right_1{
+        position:absolute;
+        left:0;
+        top:0;
+        right:0;
+        bottom:0;
+    }
+    .home_right_item1{
+        width:345px;
+        height:345px;
+        background:linear-gradient(0deg,rgba(33,183,207,1) 1%,rgba(173,244,254,1) 100%);
+        border-radius:50%;
+        position:absolute;
+        top:241px;
+        left:135px;
+        z-index:1;
+    }
+    .home_right_item1_title{
+        color:#fdffff;
+        line-height:39px;
+        padding-bottom:37px;
+        padding-top:93px;
+        text-align: center;
+        font-size:36px;
+    }
+    .home_right_item1_count{
+        font-size:72px;
+        font-family: DIN-D;
+        font-weight: bold;
+        color:#fff;
+        line-height: 44px;
+        text-align: center;
+    }
+    .home_right_item2{
+        width:276px;
+        height:276px;
+        background:linear-gradient(0deg,rgba(233,97,29,1) 0%,rgba(253,169,107,1) 100%);
+        border-radius:50%;
+        position:absolute;
+        top:498px;
+        left:277px;
+        z-index:2;
+    }
+    .home_right_item2_title{
+        color:#fdffff;
+        line-height:39px;
+        padding-bottom:28px;
+        padding-top:93px;
+        text-align: center;
+        font-size:36px;
+    }
+    .home_right_item2_count{
+        font-size:72px;
+        font-family: DIN-D;
+        font-weight: bold;
+        color:#fff;
+        line-height: 44px;
+        text-align: center;
+    }
+    .home_right_item3{
+        width:325px;
+        height:325px;
+        background:linear-gradient(0deg,rgba(154,31,143,1) 0%,rgba(244,117,232,1) 100%);
+        border-radius:50%;
+        position:absolute;
+        top:169px;
+        left:445px;
+        z-index:3;
+    }
+    .home_right_item3_title{
+        color:#fdffff;
+        line-height:44px;
+        padding-bottom:32px;
+        padding-top:122px;
+        text-align: center;
+        font-size:36px;
+    }
+    .home_right_item3_count{
+        font-size:72px;
+        font-family: DIN-D;
+        font-weight: bold;
+        color:#fff;
+        line-height: 44px;
+        text-align: center;
+    }
+    .home_right_item4{
+        width:354px;
+        height:354px;
+        background:linear-gradient(0deg,rgba(251,41,65,1) 0%,rgba(255,129,143,1) 100%);
+        border-radius:50%;
+        position:absolute;
+        top:454px;
+        left:595px;
+        z-index:4;
+    }
+    .home_right_item4_title{
+        color:#fdffff;
+        line-height:44px;
+        padding-bottom:32px;
+        padding-top:138px;
+        text-align: center;
+        font-size:36px;
+    }
+    .home_right_item4_count{
+        font-size:72px;
+        font-family: DIN-D;
+        font-weight: bold;
+        color:#fff;
+        line-height: 44px;
+        text-align: center;
+    }
+    .home_right_item5{
+        width:366px;
+        height:366px;
+        background:linear-gradient(0deg,rgba(18,68,157,1) 0%,rgba(60,129,251,1) 100%);
+        border-radius:50%;
+        position:absolute;
+        top:439px;
+        left:892px;
+        z-index:5;
+    }
+    .home_right_item5_title{
+        color:#fdffff;
+        line-height:44px;
+        padding-bottom:36px;
+        padding-top:119px;
+        text-align: center;
+        font-size:36px;
+    }
+    .home_right_item5_count{
+        font-size:72px;
+        font-family: DIN-D;
+        font-weight: bold;
+        color:#fff;
+        line-height: 44px;
+        text-align: center;
+    }
+    .home_right_item6{
+        width:381px;
+        height:381px;
+        background:linear-gradient(0deg,rgba(250,62,51,1) 0%,rgba(253,132,118,1) 100%);
+        border-radius:50%;
+        position:absolute;
+        top:153px;
+        left:794px;
+        z-index:6;
+    }
+    .home_right_item6_title{
+        color:#fdffff;
+        line-height:44px;
+        padding-bottom:40px;
+        padding-top:121px;
+        text-align: center;
+        font-size:36px;
+    }
+    .home_right_item6_count{
+        font-size:72px;
+        font-family: DIN-D;
+        font-weight: bold;
+        color:#fff;
+        line-height: 44px;
+        text-align: center;
+    }
+    .home_right_item7{
+        width:339px;
+        height:339px;
+        background:linear-gradient(0deg,rgba(28,159,66,1) 0%,rgba(71,236,124,1) 100%);
+        border-radius:50%;
+        position:absolute;
+        top:179px;
+        left:1172px;
+        z-index:7;
+    }
+    .home_right_item7_title{
+        color:#fdffff;
+        line-height:44px;
+        padding-bottom:46px;
+        padding-top:129px;
+        text-align: center;
+        font-size:36px;
+    }
+    .home_right_item7_count{
+        font-size:72px;
+        font-family: DIN-D;
+        font-weight: bold;
+        color:#fff;
+        line-height: 44px;
+        text-align: center;
+    }
+    .home_right_item8{
+        width:337px;
+        height:337px;
+        background:linear-gradient(0deg,rgba(179,143,30,1) 0%,rgba(254,216,87,1) 100%);
+        border-radius:50%;
+        position:absolute;
+        top:444px;
+        left:1293px;
+        z-index:8;
+    }
+    .home_right_item8_title{
+        color:#fdffff;
+        line-height:44px;
+        padding-bottom:32px;
+        padding-top:100px;
+        text-align: center;
+        font-size:36px;
+    }
+    .home_right_item8_count{
+        font-size:72px;
+        font-family: DIN-D;
+        font-weight: bold;
+        color:#fff;
+        line-height: 44px;
+        text-align: center;
+    }
+    .home_right_tb_head{
+        height:140px;
+        box-shadow:0px 1px 0px 0px rgba(30,136,96,0.4);
+        line-height: 140px;
+        color:rgba(255,255,255,0.6);
+        font-weight: bold;
+        font-size:48px;
+    }
+    .home_right_tb_body{
+        height:510px;
+        overflow: hidden;
+        position:relative;
+    }
+    .tb_item{
+        height:170px;
+        box-shadow:0px 1px 0px 0px rgba(30,136,96,0.4);
+        position:relative;
+        line-height:170px;
+        color:#2DFFFE;
+        font-size:48px;
+    }
+    .sxlx{
+        position:absolute;
+        top:0;
+        left:112px;
+        width:924px;
+        overflow: hidden;
+        text-overflow:ellipsis;
+        white-space: nowrap;
+    }
+    .home_right_tb_head .sxlx{
+        left:138px;
+        width: 950px;
+    }
+    .czr{
+        position:absolute;
+        left:1062px;
+        top:0;
+        width:280px;
+        overflow: hidden;
+        text-overflow:ellipsis;
+        white-space: nowrap;
+    }
+    .sj{
+        position:absolute;
+        left:1343px;
+        width:280px;
+        overflow: hidden;
+        text-overflow:ellipsis;
+        white-space: nowrap;
+    }
+    .home_right_tb_head .sj{
+        left:1428px;
+    }
+    .tb_icon{
+        position:absolute;
+        width:35px;
+        height:35px;
+        top:69px;
+        left:32px;
+        background-image: url('images/table_icon.png');
+        background-size:35px 35px;
+        background-repeat:no-repeat no-repeat;
+        background-position:0px 0;
+    }
+
+    #main{
+        position:absolute;
+        left:0;
+        right:0;
+        top:0;
+        height:2000px;
+        width:100%;
+        z-index:1;
+        /*background-size: 100% 100%!important;*/
+    }
+    #center_bar{
+        position:absolute;
+        bottom:0;
+        top:1750px;
+        height:auto;
+        width:100%;
+        left:0;
+        z-index: 4;
+    }
+    #center_bar span{
+        width:30px!important;
+        height:30px!important;
+        border-radius:30px!important;
+        margin:0 20px!important;
+    }
+    #home_left_chart1{
+        position:absolute;
+        width:100%;
+        height:100%;
+        left:0;
+        top:0;
+    }
+    #home_left_chart2{
+        position:absolute;
+        left:112px;
+        top:382px;
+        width:760px;
+        height:760px;
+    }
+    #home_right_chart2{
+        position:absolute;
+        left:57px;
+        right:119px;
+        top:170px;
+        bottom:40px;
+        width:auto;
+        height:auto;
+    }
+    #home_right_chart3{
+        position:absolute;
+        top:163px;
+        bottom:44px;
+        left:10px;
+        right:44px;
+        background:rgba(30,171,252,0.1);
+    }
+    #right_tb{
+        position:absolute;
+        left:0;
+        top:0;
+        width:auto;
+        right:0;
+    }
+</style>
+<script>
+    $(function() {
+        initData();
+    })
+    function initData() {
+        var mapData = {
+            fwl: 9288,
+            barData: [{
+                name: '潍城区',
+                sq: 1911,
+                sx: 1400
+            },{
+                name: '奎文区',
+                sq: 3211,
+                sx: 3100
+            },{
+                name: '坊子区',
+                sq: 2211,
+                sx: 2100
+            },{
+                name: '诸城市',
+                sq: 1911,
+                sx: 1900
+            },{
+                name: '昌乐县',
+                sq: 1811,
+                sx: 1800
+            },{
+                name: '寒亭区',
+                sq: 1219,
+                sx: 1190
+            },{
+                name: '安丘市',
+                sq: 1281,
+                sx: 1700
+            },{
+                name: '临朐县',
+                sq: 2811,
+                sx: 1000
+            },{
+                name: '青州市',
+                sq: 1811,
+                sx: 100
+            },{
+                name: '寿光市',
+                sq: 1711,
+                sx: 1600
+            },{
+                name: '昌邑市',
+                sq: 211,
+                sx: 1000
+            },{
+                name: '高密市',
+                sq: 121,
+                sx: 2100
+            }]
+        };
+        initMapData(mapData);
+        var left1Data = [
+            {value:1335, name:'认证用户'},
+            {value:3310, name:'实名用户'}
+        ];
+        initLeftChart1(left1Data);
+        var left2Data = [
+            {value: 613, name: '治安'},
+            {value: 721, name: '交警'},
+            {value: 452, name: '户政'},
+            {value: 561, name: '指挥中心'},
+            {value: 1245, name: '基层'},
+            {value: 521, name: '刑侦'},
+            {value: 1261, name: '出入境'},
+            {value: 845, name: '督查'},
+            {value: 1521, name: '消防'}
+        ];
+        initLeftChart2(left2Data);
+        var right1Data = [{
+            name: '首次申领<br/>居民身份证',
+            value: 122
+        },{
+            name: '夫妻投靠',
+            value: 432
+        },{
+            name: '申请临时身份证',
+            value: 3221
+        },{
+            name: '换领居民身份证',
+            value: 1444
+        },{
+            name: '居民身份证<br/>挂失申报',
+            value: 53
+        },{
+            name: '现役干部转改<br/>文职人员落户',
+            value: 12
+        },{
+            name: '公民收养入户',
+            value: 2322
+        },{
+            name: '居民身份证<br/>挂失申报',
+            value: 2444
+        }];
+        initRightChart1(right1Data);
+        var right2Data = {
+            line1:[{
+                key: '4.1',
+                value: 750
+            },{
+                key: '4.2',
+                value: 1020
+            },{
+                key: '4.3',
+                value: 740
+            },{
+                key: '4.4',
+                value: 1255
+            },{
+                key: '4.5',
+                value: 920
+            },{
+                key: '4.6',
+                value: 1400
+            },{
+                key: '4.7',
+                value: 780
+            }],
+            line2:[{
+                key: '4.1',
+                value: 250
+            },{
+                key: '4.2',
+                value: 1600
+            },{
+                key: '4.3',
+                value: 1300
+            },{
+                key: '4.4',
+                value: 1750
+            },{
+                key: '4.5',
+                value: 1450
+            },{
+                key: '4.6',
+                value: 720
+            },{
+                key: '4.7',
+                value: 1250
+            }]
+        };
+        initRightChart2(right2Data);
+        var tableData = [
+            {sxlx:'现役干部转改文职人员落户',czr:'王正义',sj:'2017-08-08'},
+            {sxlx:'居民身份证挂失申报',czr:'王正义',sj:'2017-08-07'},
+            {sxlx:'夫妻投靠',czr:'王正义',sj:'2017-08-07'},
+            {sxlx:'现役干部转改文职人员落户',czr:'王正义',sj:'2017-08-06'},
+            {sxlx:'夫妻投靠',czr:'王正义',sj:'2017-08-05'}
+        ];
+        initRightTable(tableData);
+    }
+    function initRightTable(data) {
+        var _d = $("#right_tb").html('');
+        function addItem(item) {
+            var it = $('<div>').addClass('tb_item');
+            var icon = $('<div>').addClass('tb_icon');
+            var sxlx = $('<div>').addClass('sxlx').html(item.sxlx);
+            var czr = $('<div>').addClass('czr').html(item.czr);
+            var sj = $('<div>').addClass('sj').html(item.sj);
+            it.append(icon).append(sxlx).append(czr).append(sj);
+            _d.append(it);
+        }
+        data.forEach(function(item,index) {
+            addItem(item);
+        });
+        if(data.length>=3){
+            addItem(data[0]);
+            addItem(data[1]);
+            addItem(data[2]);
+            var num = 0;
+            var step = 170;
+            var stopSpeed = 2000;
+            var animateSpeed = 2000;
+            function goAnimate() {
+                var curr = num%(data.length+1);
+                var speed = animateSpeed;
+                $("#right_tb").animate({
+                    top:-curr*step+'px'
+                },{},speed);
+                setTimeout(function(){
+                    if(curr===data.length) {
+                        $("#right_tb").css({
+                            top: 0
+                        });
+                        num++;
+                    }
+                },speed);
+                num++;
+            }
+            goAnimate();
+            var interval = setInterval(goAnimate,animateSpeed+stopSpeed);
+            $("#right_tb").hover(function(){
+                if(interval){
+                    clearInterval(interval);
+                }
+            },function(){
+                interval = setInterval(goAnimate,animateSpeed+stopSpeed);
+            })
+        }
+    }
+    function initLeftChart2Legend(data,sum){
+        var _d = $("#homeLeftLegend2").html('');
+        data.forEach(function(item,index) {
+            var it = $('<div>').addClass('home_left_legend2_item');
+            var icon = $('<div>').addClass('home_left_legend2_icon').css({
+                backgroundColor: item.color
+            });
+            var title = $('<div>').addClass('home_left_legend2_title').html(item.name);
+            var value = $('<div>').addClass('home_left_legend2_value').html(item.value);
+            var persent = $('<div>').addClass('home_left_legend2_persent')
+                .html(Math.round(item.value*1000/sum)/10+'%');
+            it.append(icon).append(title).append(value).append(persent);
+            _d.append(it);
+        });
+    }
+    function initRightChart2(data) {
+        var data1 = [];
+        var data2 = [];
+        var xAxisData = [];
+        data.line1.forEach(function(item){
+            xAxisData.push(item.key);
+            data1.push(item.value);
+        });
+        data.line2.forEach(function(item){
+            data2.push(item.value);
+        });
+        var colors = [
+            '#187CF7','#37ECAF'
+        ];
+        var option = {
+            tooltip: {
+                trigger: 'item',
+                backgroundColor: 'rgba(0,0,0,0)',
+                formatter: function(params) {
+                    console.log(params)
+                    // var name = params.name
+                    // var list = areaMapData.filter(function(item) {
+                    //     return item.name === name
+                    // });
+                    // var item = {}
+                    // if (list.length>0){
+                    //     item = list[0]
+                    // }
+                    return '<div class="tooltip_box1">'
+                        +'<div class="tooltip_box1_label">'+params.data+'起</div>'
+                        +'</div>';
+                }
+            },
+            legend: {
+                data:[
+                    {name:'诉求数量',icon:'rect'},
+                    {name:'事项数量',icon:'rect'}
+                ],
+                itemGap: 5,
+                top:0,
+                right: '1%',
+                textStyle: {
+                    fontSize: 56,
+                    color: '#fff'
+                },
+                itemWidth:84,
+                itemHeight:46
+            },
+            grid: {
+                top: '15%',
+                left: '1%',
+                right: '1%',
+                containLabel: true
+            },
+            xAxis: {
+                type : 'category',
+                data : xAxisData,
+                axisLabel:{
+                    textStyle: {
+                        color:'#fff',
+                        fontSize: 56
+                    }
+                },
+                axisTick:{
+                    show: false,
+                    lineStyle: {
+                        color:'#32EBE4',
+                        width: 4
+                    }
+                },
+                aXisLine: {
+                    show:false,
+                    lineStyle: {
+                        color:'#32EBE4',
+                        width: 2
+                    }
+                },
+                splitLine: {
+                    show: true,
+                    lineStyle:{
+                        color: '#32EBE4',
+                        width:2
+                    }
+                }
+            },
+            yAxis: [
+                {
+                    type : 'value',
+                    axisLine: {
+                        show:false
+                    },
+                    axisTick: {
+                        show: false
+                    },
+                    axisLabel: {
+                        textStyle: {
+                            color:'rgba(50,235,228,1)',
+                            fontSize: 56
+                        }
+                    },
+                    splitLine: {
+                        show: true,
+                        lineStyle:{
+                            color: '#32EBE4',
+                            width:2
+                        }
+                    },
+                    splitNumber:5
+                }
+            ],
+            series: [
+                {
+                    name:'诉求数量',
+                    type:'line',
+                    symbolSize:15,
+                    itemStyle: {
+                        normal: {
+                            color: colors[0]
+                        }
+                    },
+                    sampling: 'average',
+                    areaStyle: {
+                        normal: {
+                            color: new echarts.graphic.LinearGradient(0,0,0,1,[
+                                {offset:0,color:'rgba(24,124,247,1)'},
+                                {offset:1,color:'rgba(24,124,247,0)'}
+                            ])
+                        }
+                    },
+                    data: data1
+                },{
+                    name:'事项数量',
+                    type:'line',
+                    symbolSize:15,
+                    itemStyle: {
+                        normal: {
+                            color: colors[1]
+                        }
+                    },
+                    sampling: 'average',
+                    areaStyle: {
+                        normal: {
+                            color: new echarts.graphic.LinearGradient(0,0,0,1,[
+                                {offset:0,color:'rgba(55,236,175,1)'},
+                                {offset:1,color:'rgba(55,236,175,0)'}
+                            ])
+                        }
+                    },
+                    data: data2
+                }
+            ]
+        };
+        var chart = echarts.init(document.getElementById("home_right_chart2"));
+        chart.setOption(option);
+    }
+    function initRightChart1(data) {
+        data.forEach(function(item,index){
+            $(".home_right_item"+(index+1)+"_title").html(item.name)
+            $(".home_right_item"+(index+1)+"_count").html(item.value)
+        })
+    }
+    function initLeftChart2(data) {
+        var pieData = [];
+        var colors = [
+            '#1893EE','#E65AAE','#FB224B','#825CE5','#27E4EB','#4C37FB','#FBB53B','#28BF52','#E96F4F'
+        ]
+        var legendData = [];
+        var sum = 0;
+        data.forEach(function(item,index){
+            sum += item.value;
+            legendData.push({
+                value: item.value,
+                name: item.name,
+                color: colors[index]
+            });
+            var it = {
+                value: item.value,
+                name: item.name
+            };
+            if(colors.length>index) {
+                it.itemStyle = {
+                    color: colors[index]
+                }
+            }
+            pieData.push(it)
+        });
+        initLeftChart2Legend(legendData,sum);
+        var option = {
+            tooltip: {
+                trigger: 'item',
+                formatter: "{b}: {c} ({d}%)"
+            },
+            grid:{
+                left:0,
+                top:0,
+                right:0,
+                bottom:0
+            },
+            series: [
+                {
+                    name:'注册用户',
+                    type:'pie',
+                    roseType:'radius',
+                    radius: ['30%', '95%'],
+                    avoidLabelOverlap: false,
+                    label: {
+                        normal: {
+                            show: false
+                        },
+                        emphasis: {
+                            show: false
+                        }
+                    },
+                    labelLine: {
+                        normal: {
+                            show: false
+                        }
+                    },
+                    data: pieData
+                }
+            ]
+        };
+        var chart = echarts.init(document.getElementById("home_left_chart2"));
+        chart.setOption(option);
+    }
+    function initLeftChart1Legend(data) {
+        var _d = $("#homeLeftLegend1").html('');
+        data.forEach(function(item,index) {
+            var it = $('<div>').addClass('home_left_legend1_item');
+            var icon = $('<div>').addClass('home_left_legend1_icon'+(index+1));
+            var title = $('<div>').addClass('home_left_legend1_title').html(item.name)
+            var value = $('<ul>').addClass('home_left_legend1_value').html('').css({
+                color: item.color
+            });
+            it.append(icon).append(title).append(value);
+            _d.append(it);
+            value.runNum(item.value,{
+                width:70,
+                height:100,
+                speed: 1000
+            });
+        });
+    }
+    function initLeftChart1(data) {
+        var pieData = [];
+        var legendData = [{
+            value: 0,
+            name: '注册用户',
+            color: '#32EBE4'
+        }];
+        var colors = ['#FEEF35', '#187EFB'];
+        data.forEach(function(item,index){
+            legendData[0].value += item.value
+            legendData.push({
+                value: item.value,
+                name: item.name,
+                color: colors[index]
+            });
+            var it = {
+                value: item.value,
+                name: item.name
+            };
+            if(colors.length>index) {
+                it.itemStyle = {
+                    color: colors[index]
+                }
+            }
+            pieData.push(it)
+        });
+        $("#registorCount").html(legendData[0].value);
+        initLeftChart1Legend(legendData);
+        var option = {
+            tooltip: {
+                trigger: 'item',
+                formatter: "{b}: {c} ({d}%)"
+            },
+            grid:{
+                left:0,
+                top:0,
+                right:0,
+                bottom:0
+            },
+            series: [
+                {
+                    name:'注册用户',
+                    type:'pie',
+                    radius: ['70%', '95%'],
+                    avoidLabelOverlap: false,
+                    label: {
+                        normal: {
+                            show: false
+                        },
+                        emphasis: {
+                            show: false
+                        }
+                    },
+                    labelLine: {
+                        normal: {
+                            show: false
+                        }
+                    },
+                    data: pieData
+                }
+            ]
+        };
+        var chart = echarts.init(document.getElementById("home_left_chart1"));
+        chart.setOption(option);
+    }
+    function initMapData(mapData) {
+        var fwl = mapData.fwl;
+        var areaMapData = mapData.barData;
+        $(function() {
+            $("#home_map_count").runNum(fwl,{
+                addMin: 0,
+                addMax: 0
+            });
+        })
+        $.get('js/map/json/city/weifang.json', function (mapJson) {
+            echarts.registerMap('weifang', mapJson);
+            var mapData = [];
+            var geoCoordMap = {}
+            // var areaMapData = []
+            mapJson.features.forEach(function(item, i) {
+                mapData.push({
+                    name: item.properties.name,
+                    value: item.properties.center.concat([40]),
+                    label: {
+                        normal: {
+                            position: item.properties.name==='奎文区'?'right':item.properties.name==='潍城区'?'left':item.properties.name==='坊子区'?'bottom':'top'
+                        }
+                    }
+                });
+                // areaMapData.push({
+                //     name: item.properties.name,
+                //     sq: Math.round(Math.random() * 10000),
+                //     sx: Math.round(Math.random() * 10000)
+                // })
+                geoCoordMap[item.properties.name] = item.properties.center
+            });
+            initCenterBar(areaMapData)
+            // 获取echarts的容器
+            var chart = echarts.init(document.getElementById("main"));
+
+            var color  = ['rgba(255,255,255,0.8)', 'rgba(251,14,25,1)', 'rgba(255,255,255,0.8)'];	// 自定义图中要用到的颜色
+            var series = [];
+
+            series.push({
+                type: 'map',
+                map: 'weifang',
+                itemStyle:{
+                    normal:{
+                        label:{
+                            show: false
+                        },
+                        areaColor:'rgba(63,178,233,1)',
+                        borderColor:"#1BECE4",//边框颜色
+                        borderWidth:1,//柱条的描边宽度，默认不描边。
+                        borderType:"solid", //柱条的描边类型，默认为实线，支持 'dashed', 'dotted'。
+                        opacity:1
+                    }
+                },
+                emphasis:{
+                    label:{
+                        show: false
+                    },
+                    itemStyle: {
+                        areaColor:'rgba(63,178,233,0.9)',
+                        borderColor:"#1BECE4",//边框颜色
+                        borderWidth:1,//柱条的描边宽度，默认不描边。
+                        borderType:"solid", //柱条的描边类型，默认为实线，支持 'dashed', 'dotted'。
+                        opacity:1
+                    }
+                }
+            });
+
+            // 显示终点位置,类似于上面最后一个效果，放在外面写，是为了防止被循环执行多次
+            series.push({
+                type: 'effectScatter',
+                coordinateSystem: 'geo',
+                zlevel: 3,
+                rippleEffect: {
+                    brushType: 'stroke'
+                },
+                label: {
+                    normal: {
+                        show: true,
+                        position: 'left',
+                        formatter: '{b}',
+                        fontSize: 36,
+                        color:color[2]
+                    }
+                },
+                symbolSize: function(val) {
+                    return val[2]/2;
+                },
+                itemStyle: {
+                    color: '#fff',
+                    normal: {
+                        color: color[1]
+                    }
+                },
+                data: mapData
+            });
+
+            // 最后初始化世界地图中的相关数据
+            chart.setOption({
+                grid: {
+                    top:0,
+                    bottom:0
+                },
+                tooltip: {
+                    trigger: 'item',
+                    backgroundColor: 'rgba(0,0,0,0)',
+                    formatter: function(params) {
+                        console.log(params)
+                        var name = params.name
+                        var list = areaMapData.filter(function(item) {
+                            return item.name === name
+                        });
+                        var item = {}
+                        if (list.length>0){
+                            item = list[0]
+                            return '<div class="tooltip_box">'
+                                +'<div class="t_item1"><div class="t_icon1"></div><div class="t_item_label">诉讼数量：'+item.sq+'</div></div>'
+                                +'<div class="t_item2"><div class="t_icon2"></div><div class="t_item_label">事项数量：'+item.sx+'</div></div>'
+                                +'</div>';
+                        }else {
+                            return ''
+                        }
+
+                    }
+                },
+                geo: {
+                    map: 'weifang',       // 与引用进来的地图js名字一致
+                    roam: false        // 禁止缩放平移
+                },
+                series: series   // 将之前处理的数据放到这里
+            });
+        });
+    }
+    function initCenterBar(data) {
+        var barData1 = [];
+        var barData2 = [];
+        var series = [];
+        var xAxisData = [];
+        data.forEach(function (item, i) {
+            xAxisData.push(item.name)
+            barData1.push(item.sq);
+            barData2.push(item.sx);
+        });
+        var chart = echarts.init(document.getElementById("center_bar"));
+        series.push({
+            name: '诉求数量',
+            type: 'bar',
+            data: barData1,
+            itemStyle: {
+                color: new echarts.graphic.LinearGradient(0,0,0,1,[
+                    {offset: 0, color: 'rgba(24,126,251,1)'},
+                    {offset: 1, color: 'rgba(24,126,251,0)'}
+                ])
+            }
+        })
+        series.push({
+            name: '事项数量',
+            type: 'bar',
+            data: barData2,
+            itemStyle: {
+                color: new echarts.graphic.LinearGradient(0,0,0,1,[
+                    {offset: 0, color: 'rgba(55,236,175,1)'},
+                    {offset: 1, color: 'rgba(55,236,175,0)'}
+                ])
+            }
+        })
+
+
+        chart.setOption({
+            tooltip : {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'shadow',
+                    label: {
+                        show: true
+                    }
+                },
+                textStyle: {
+                    fontSize: 56
+                }
+            },
+            calculable : true,
+            legend: {
+                data:['诉求数量', '事项数量'],
+                itemGap: 5,
+                top:0,
+                right: '1%',
+                textStyle: {
+                    fontSize: 56,
+                    color: '#fff'
+                },
+                itemWidth:84,
+                itemHeight:46
+            },
+            grid: {
+                top: '15%',
+                left: '1%',
+                right: '1%',
+                containLabel: true
+            },
+            xAxis: [
+                {
+                    type : 'category',
+                    data : xAxisData,
+                    axisLabel:{
+                        textStyle: {
+                            color:'#fff',
+                            fontSize: 56
+                        }
+                    },
+                    aXisLine: {
+                        show:false,
+                        lineStyle: {
+                            color:'#32EBE4',
+                            width: 4
+                        }
+                    }
+                }
+            ],
+            yAxis: [
+                {
+                    type : 'value',
+                    axisLine: {
+                        show:false
+                    },
+                    axisTick: {
+                        show: false
+                    },
+                    axisLabel: {
+                        textStyle: {
+                            color:'rgba(255,255,255,0.4)',
+                            fontSize: 56
+                        }
+                    },
+                    splitLine: {
+                        show: true,
+                        lineStyle:{
+                            color: ['#32EBE4'],
+                            width:4
+                        }
+                    },
+                    splitNumber:5
+                }
+            ],
+            dataZoom: [
+                {
+                    show: true,
+                    start: 0,
+                    end: 100
+                },
+                {
+                    type: 'inside',
+                    start: 0,
+                    end: 100
+                }
+            ],
+            series: series
+        });
+    }
+
+</script>
+</html>
