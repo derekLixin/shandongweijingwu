@@ -18,7 +18,6 @@
     <script type="text/javascript" src="js/jquery.min.js"></script>
     <!--&lt;!&ndash; 开发环境版本，包含了有帮助的命令行警告 &ndash;&gt;-->
     <!--<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>-->
-    <script src="http://api.map.baidu.com/api?v=1.4" type="text/javascript"></script>
 
     <style>
         body{
@@ -28,26 +27,152 @@
         .service_head{
             width:100%;
             min-height:100px;
-            background:red;
+        }
+        .service_body{
+            position:absolute;
+            left:0;
+            right:0;
+            bottom:0;
+            top:0;
+        }
+        .service_citys{
+            width:72px;
+            position:absolute;
+            top:0;
+            bottom:0;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+        .service_citys::-webkit-scrollbar {
+            display: none;
+        }
+        .service_city{
+            height:48px;
+            text-align: center;
+            line-height: 48px;
+            font-size:14px;
+            color:#666;
+            background:rgba(247,248,248,1);
+        }
+        .service_city.active{
+            background-color:#fff;
+        }
+        .service_city.position{
+            text-align: left;
+            padding-left:30px;
+            color:#333;
+            background-image:url("images/service_icon_location.png");
+            background-repeat:no-repeat no-repeat;
+            background-size:20px 20px;
+            background-position:8px center;
+        }
+        .service_box{
+            position:absolute;
+            left:72px;
+            top:0;
+            bottom:0;
+            right:0;
+            padding-top: 30px;
+        }
+        .service_list{
+            position:relative;
+            padding:0 20px;
+        }
+        .service_item{
+            position:relative;
+            float:left;
+            width:33.3%;
+            height:70px;
+            margin-bottom:30px;
+        }
+        .service_item_icon{
+            width:40px;
+            height:40px;
+            margin:0 auto;
+        }
+        .service_item_name{
+            padding-top:10px;
+            text-align: center;
+            font-size:13px;
+            font-weight:400;
+            color:rgba(34,34,34,1);
+            line-height:20px;
+        }
+        .icon_crj{
+            background-image:url("images/service_icon_churujing.png");
+            background-size:100% 100%;
+            background-position:0 0;
+            background-repeat: no-repeat no-repeat;
+        }
+        .icon_ycnc{
+            background-image:url("images/service_icon_yijiannuoche.png");
+            background-size:100% 100%;
+            background-position:0 0;
+            background-repeat: no-repeat no-repeat;
+        }
+        .icon_swzl{
+            background-image:url("images/service_icon_shiwuzhaoling.png");
+            background-size:100% 100%;
+            background-position:0 0;
+            background-repeat: no-repeat no-repeat;
+        }
+        .icon_znkf{
+            background-image:url("images/service_icon_kefu.png");
+            background-size:100% 100%;
+            background-position:0 0;
+            background-repeat: no-repeat no-repeat;
+        }
+        .service_copy{
+            position:absolute;
+            bottom:0;
+            width:240px;
+            left:50%;
+            margin-left:-115px;
+            font-size:11px;
+            font-weight:400;
+            color:rgba(102,102,102,1);
+            line-height:15px;
+            padding-bottom:40px;
+            text-align: center;
+            background-image:url("images/service_copy_right.png");
+            background-size:172px 26px;
+            background-position:center 35px;
+            background-repeat: no-repeat no-repeat;
         }
     </style>
 </head>
 <body>
 <div id="app">
     <div class="service_head" v-bind:style="'height:'+height+'px;'">
-        <image src="images/service_head_bg.png" style="width:100%;"></image>
+        <img v-bind:src="banner " style="width:100%;"/>
     </div>
-    <div class="service_body">
+    <div class="service_body" v-bind:style="'top:'+height+'px;'">
         <div class="service_citys">
-            <div class="service_city">济南</div>
-            <div class="service_city">济南</div>
-            <div class="service_city">济南</div>
-            <div class="service_city">济南</div>
-            <div class="service_city">济南</div>
-            <div class="service_city">济南</div>
+            <div v-bind:class="'service_city position '+(-1===city?'active':'')" v-on:click="showCity(-1)">济南</div>
+            <div v-bind:class="'service_city '+(index===city?'active':'')" v-for="(item, index) in showCityList" v-on:click="showCity(index)">{{item.name}}</div>
         </div>
         <div class="service_box">
-            123
+            <div class="service_list">
+                <div class="service_item" v-on:click="doSomething">
+                    <div class="service_item_icon icon_crj"></div>
+                    <div class="service_item_name">出入境管理</div>
+                </div>
+                <div class="service_item" v-on:click="doSomething">
+                    <div class="service_item_icon icon_ycnc"></div>
+                    <div class="service_item_name">移车挪车</div>
+                </div>
+                <div class="service_item" v-on:click="doSomething">
+                    <div class="service_item_icon icon_swzl"></div>
+                    <div class="service_item_name">失物招领</div>
+                </div>
+                <div class="service_item" v-on:click="doSomething">
+                    <div class="service_item_icon icon_znkf"></div>
+                    <div class="service_item_name">智能客服</div>
+                </div>
+            </div>
+            <div class="service_copy">
+                欢迎进入地市分站模块！您可以选择相应地市， 享受该市个性化服务。
+            </div>
         </div>
     </div>
 </div>
@@ -59,130 +184,105 @@
         data: {
             screenWidth: document.body.clientWidth, // 屏幕尺寸
             height: defaultH * (document.body.clientWidth / defaultW),
-            message: 'Hello Vue!'
+            message: 'Hello Vue!',
+            city: -1,
+            banner: '',
+            name:'',
+            showCityList: [],
+            cityList: [{
+                code: '370001',
+                name: '东营',
+                banner: 'images/东营.png'
+            },{
+                code: '370002',
+                name: '临沂',
+                banner: 'images/临沂.png'
+            },{
+                code: '370003',
+                name: '威海',
+                banner: 'images/威海.png'
+            },{
+                code: '370004',
+                name: '德州',
+                banner: 'images/德州.png'
+            },{
+                code: '370005',
+                name: '日照',
+                banner: 'images/日照.png'
+            },{
+                code: '370006',
+                name: '枣庄',
+                banner: 'images/枣庄.png'
+            },{
+                code: '370007',
+                name: '泰安',
+                banner: 'images/泰安.png'
+            },{
+                code: '370008',
+                name: '济南',
+                banner: 'images/济南.png'
+            },{
+                code: '370009',
+                name: '济宁',
+                banner: 'images/济宁.png'
+            },{
+                code: '370010',
+                name: '淄博',
+                banner: 'images/淄博.png'
+            },{
+                code: '370011',
+                name: '滨州',
+                banner: 'images/滨州.png'
+            },{
+                code: '370012',
+                name: '潍坊',
+                banner: 'images/潍坊.png'
+            },{
+                code: '370013',
+                name: '烟台',
+                banner: 'images/烟台.png'
+            },{
+                code: '370014',
+                name: '聊城',
+                banner: 'images/聊城.png'
+            },{
+                code: '370015',
+                name: '菏泽',
+                banner: 'images/菏泽.png'
+            },{
+                code: '370016',
+                name: '青岛',
+                banner: 'images/青岛.png'
+            }]
         },
         mounted() {
             var that = this
+            this.initCity();
             this.onResize();
             window.onresize = function(){
                 that.onResize()
             }
-            this.getPosition();
         },
         methods: {
+            doSomething() {
+                alert('执行服务脚本')
+              //执行服务脚本
+            },
+            initCity() {
+                var cityCode = '370008';
+                this.showCityList = [].concat(...this.cityList);
+                var o = this.showCityList.filter(item => item.code === cityCode)[0]
+                this.name = o.name;
+                this.banner = o.banner;
+                var index = this.showCityList.indexOf(o);
+                this.showCityList.splice(index, 1);
+            },
+            showCity(index) {
+                this.city = index
+                this.banner = this.showCityList[index].banner
+            },
             onResize() {
                 this.height = defaultH * (document.body.clientWidth / defaultW)
-            },
-            getPosition() {
-                var curDateTime = function() {
-                    return new Date().getTime()
-                }
-                var getLocation = function (successFunc, errorFunc) { //successFunc获取定位成功回调函数，errorFunc获取定位失败回调
-                    //首先设置默认城市
-                    var defCity = {
-                        id: '000001',
-                        name: '北京市',
-                        date: curDateTime()//获取当前时间方法
-                    };
-                    //默认城市
-                    // $.cookie('VPIAO_MOBILE_DEFAULTCITY', JSON.stringify(defCity), { expires: 1, path: '/' });
-
-                    if (navigator.geolocation) {
-                        navigator.geolocation.getCurrentPosition(function (position) {
-                                var lat = position.coords.latitude;
-                                var lon = position.coords.longitude;
-                                //var map = new BMap.Map("container");   // 创建Map实例
-                                var point = new BMap.Point(lon, lat); // 创建点坐标
-                                var gc = new BMap.Geocoder();
-                                gc.getLocation(point, function (rs) {
-                                    var addComp = rs.addressComponents;
-                                    var curCity = {
-                                        id: '',
-                                        name: addComp.province,
-                                        date: curDateTime()
-                                    };
-                                    //当前定位城市
-                                    // $.cookie('VPIAO_MOBILE_CURRENTCITY', JSON.stringify(curCity), { expires: 7, path: '/' });
-                                    //alert(addComp.province + ", " + addComp.city + ", " + addComp.district + ", " + addComp.street);
-                                    if (successFunc != undefined)
-                                        successFunc(addComp);
-                                });
-                            },
-                            function (error) {
-                                switch (error.code) {
-                                    case 1:
-                                        alert("位置服务被拒绝。");
-                                        break;
-                                    case 2:
-                                        alert("暂时获取不到位置信息。");
-                                        break;
-                                    case 3:
-                                        alert("获取位置信息超时。");
-                                        break;
-                                    default:
-                                        alert("未知错误。");
-                                        break;
-                                }
-                                var curCity = {
-                                    id: '000001',
-                                    name: '北京市',
-                                    date: curDateTime()
-                                };
-                                //默认城市
-                                // $.cookie('VPIAO_MOBILE_DEFAULTCITY', JSON.stringify(curCity), { expires: 1, path: '/' });
-                                if (errorFunc != undefined)
-                                    errorFunc(error);
-                            }, { timeout: 5000, enableHighAccuracy: true });
-                    } else {
-                        alert("你的浏览器不支持获取地理位置信息。");
-                        if (errorFunc != undefined)
-                            errorFunc("你的浏览器不支持获取地理位置信息。");
-                    }
-                };
-                var showPosition = function (position) {
-                    var lat = position.coords.latitude;
-                    var lon = position.coords.longitude;
-                    //var map = new BMap.Map("container");   // 创建Map实例
-                    var point = new BMap.Point(lon, lat); // 创建点坐标
-                    var gc = new BMap.Geocoder();
-                    gc.getLocation(point, function (rs) {
-                        var addComp = rs.addressComponents;
-                        var curCity = {
-                            id: '',
-                            name: addComp.province,
-                            date: curDateTime()
-                        };
-                        //当前定位城市
-                        // $.cookie('VPIAO_MOBILE_CURRENTCITY', JSON.stringify(curCity), { expires: 7, path: '/' });
-                        //alert(addComp.province + ", " + addComp.city + ", " + addComp.district + ", " + addComp.street);
-                    });
-                };
-                var showPositionError = function (error) {
-                    switch (error.code) {
-                        case 1:
-                            alert("位置服务被拒绝。");
-                            break;
-                        case 2:
-                            alert("暂时获取不到位置信息。");
-                            break;
-                        case 3:
-                            alert("获取位置信息超时。");
-                            break;
-                        default:
-                            alert("未知错误。");
-                            break;
-                    }
-                    var curCity = {
-                        id: '000001',
-                        name: '北京市',
-                        date: curDateTime()
-                    };
-                    //默认城市
-                    // $.cookie('VPIAO_MOBILE_DEFAULTCITY', JSON.stringify(curCity), { expires: 1, path: '/' });
-                };
-                getLocation(function(result) {
-                    console.log(result);
-                })
             }
         }
     })
