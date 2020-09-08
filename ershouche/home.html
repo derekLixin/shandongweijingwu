@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <!--移动端配置-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="Cache-Control" content="max-age=0">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <!-- 是否启用 WebApp 全屏模式，删除苹果默认的工具栏和菜单栏 -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <!-- 设置苹果工具栏颜色 -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <!-- 忽略页面中的数字识别为电话，忽略email识别 -->
+    <meta name="format-detection" content="telphone=no, email=no">
+
+    <!-- 引入组件 -->
+    <script src="js/vue.js"></script>
+    <script src="js/vant.js"></script>
+<!--    <link rel="stylesheet" href="./js/swiper/swiper.min.css">-->
+<!--    <script src="./js/swiper/swiper.min.js"></script>-->
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="js/vant.css">
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+        #app {
+            background:#f4f5f9;
+        }
+        .top_desc{
+            background:#F55B39;
+            padding:10px 0;
+            margin-bottom:5px;
+            position:relative;
+        }
+        .top_desc_btns{
+            padding:0 7.5px;
+        }
+        .top_desc_info{
+            font-family: NotoSansCJKsc-Regular;
+            font-size: 11px;
+            color: #FFFFFF;
+            line-height:17px;
+            padding:0 15px 10px 15px;
+        }
+        .top_btn{
+            margin:0 7.5px;
+            border-radius: 4px;
+            background:#fff;
+            height:28px;
+            line-height: 28px;
+            text-align: center;
+            font-family: NotoSansCJKsc-Medium;
+            font-size: 12px;
+            color: #F55B39;
+        }
+        .vin_number{
+            background:#fff;
+            position:relative;
+            margin-bottom:5px;
+        }
+        .vin_number_title{
+            padding:15px 0 20px 0;
+            text-align: center;
+            font-family: NotoSansCJKsc-Medium;
+            font-size: 16px;
+            color: #007AFF;
+            line-height: 24px;
+        }
+        .vin_number_input{
+            height:40px;
+            margin:0 15px;
+            border:1px solid #979797;
+            border-radius: 4px;
+            overflow: hidden;
+            position:relative;
+        }
+        .vin_number_input input{
+            border:none;
+            height:40px;
+            line-height: 40px;
+            width:100%;
+            box-sizing: border-box;
+            padding: 0 40px;
+            text-align: center;
+        }
+        .vin_number_photograph{
+            position:absolute;
+            right:12px;
+            top:0;
+            width:28px;
+            bottom:0;
+            font-size:30px;
+            padding:2px 0;
+            color:#aeaeae;
+        }
+        .vin_number_desc{
+            padding:10px 0 31px 0;
+            font-family: PingFangSC-Regular;
+            font-size: 11px;
+            color: #808080;
+            letter-spacing: -0.07px;
+            text-align: center;
+            line-height: 16px;
+        }
+        .vin_number_btn{
+            margin: 0 14px;
+            height:50px;
+            font-family: PingFangSC-Regular;
+            font-size: 16px;
+            color: #FFFFFF;
+            letter-spacing: -0.39px;
+            text-align: center;
+            background: #007AFF;
+            border-radius: 4px;
+            line-height: 50px;
+        }
+        .vin_number_info{
+            font-family: PingFangSC-Regular;
+            font-size: 11px;
+            color: #999999;
+            letter-spacing: -0.07px;
+            padding:13px 14px 10px 14px;
+            text-align: left;
+        }
+        .draft_box{
+            margin-bottom:5px;
+            background:#fff;
+            padding-left:15px;
+            padding-bottom:10px;
+            position:relative;
+        }
+        .draft_title{
+            padding:10px 0 15px 0;
+            margin-bottom: 15px;
+            position:relative;
+            height:20px;
+        }
+        .draft_top_title{
+            float:left;
+            width:70px;
+            height:20px;
+            line-height: 20px;
+            padding-right:5px;
+            font-family: NotoSansCJKsc-Medium;
+            font-size: 14px;
+            color: #4D4D4D;
+            font-weight: bold;
+        }
+        .draft_top_desc{
+            float:left;
+            height:16px;
+            margin-top:2px;
+            line-height: 16px;
+            font-family: PingFangSC-Regular;
+            font-size: 11px;
+            color: #7F7F7F;
+        }
+        .draft_list{
+            position:relative;
+            height:149px;
+            display:-webkit-flex;
+            display: flex;
+            overflow-y: hidden;
+            overflow-x: auto;
+            width: 100%;
+            box-sizing: border-box;
+            margin-bottom:5px;
+        }
+        .draft_item{
+            position:relative;
+            width:124px;
+            height:147px;
+            margin-right:10px;
+            border:1px solid #C0C0C0;
+        }
+        .draft_item_add_icon{
+            margin:50px auto 0 auto;
+            width:36px;
+            height:36px;
+            border-radius: 36px;
+            background:#fff;
+            box-sizing: border-box;
+            text-align: center;
+            line-height: 38px;
+            color:#999;
+        }
+        .draft_item_add{
+            padding:20px 0;
+            text-align: center;
+            color:#fff;
+            font-size:14px;
+            line-height: 20px;
+            width: 124px;
+        }
+        .draft_item_title{
+            width:124px;
+            padding:5px 0px 10px 0px;
+            overflow: hidden;
+            text-overflow:ellipsis;
+            white-space: nowrap;
+            font-family: PingFangSC-Regular;
+            font-size: 11px;
+            color: #007AFF;
+            text-align: center;
+            line-height: 17px;
+        }
+        .draft_item_info{
+            font-family: PingFangSC-Regular;
+            font-size: 11px;
+            color: #7F7F7F;
+            line-height: 16px;
+            height:16px;
+            text-align: left;
+            padding:0 10px 5px 10px;
+            overflow: hidden;
+            text-overflow:ellipsis;
+            white-space: nowrap;
+        }
+        .draft_item_btn{
+            position:absolute;
+            left:0;
+            bottom:0;
+            right:0;
+            height:26px;
+            text-align: center;
+            font-family: PingFangSC-Regular;
+            font-size: 11px;
+            color: #FFFFFF;
+            line-height: 26px;
+            background: #007aff;
+        }
+        .draft_list_box{
+            margin-right:15px;
+        }
+        .draft_help{
+            padding-bottom:15px;
+            background:#fff;
+        }
+        .draft_help_title{
+            padding:15px;
+            text-align: center;
+            height:20px;
+            line-height: 20px;
+            font-family: PingFangSC-Medium;
+            font-size: 14px;
+            color: #007AFF;
+            letter-spacing: -0.09px;
+        }
+        .draft_help_group{
+            position:relative;
+        }
+        .draft_help_group_title{
+            line-height: 17px;
+            padding:0 15px 5px 15px;
+            font-family: PingFangSC-Medium;
+            font-size: 12px;
+            color: #4D4D4D;
+            font-weight: bold;
+            letter-spacing: -0.07px;
+        }
+        .draft_help_group_desc{
+            font-family: PingFangSC-Medium;
+            font-size: 12px;
+            color: #4D4D4D;
+            letter-spacing: -0.07px;
+            margin-bottom:15px;
+            padding: 0 15px;
+        }
+        .draft_help_group_img{
+            margin:0 48px 15px 48px;
+        }
+        .draft_help_group_img img{
+            width: 100%;
+            position: relative;
+            display: block;
+            padding:0;
+            margin:0;
+        }
+        .draft_help_group_img_title{
+            padding-top:10px;
+            font-family: NotoSansCJKsc-Regular;
+            font-size: 12px;
+            color: #4A4A4A;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div id="app" v-cloak>
+    <div class="top_desc">
+        <div class="top_desc_info">
+            您在此发布的车辆性质为个人车源，如果您已经是入驻商家请前往车商通发布车源。如果您是经营二手车的商户/4S店，欢迎您入住华瑞源平台，享受丰富的卖车体验！
+        </div>
+        <div class="top_desc_btns">
+            <van-row>
+                <van-col span="12">
+                    <div class="top_btn">打开车商通</div>
+                </van-col>
+                <van-col span="12">
+                    <div class="top_btn">入驻华瑞源</div>
+                </van-col>
+            </van-row>
+        </div>
+    </div>
+    <div class="vin_number">
+        <div class="vin_number_title">
+            填写车辆识别代码(VIN)发布车辆
+        </div>
+        <div class="vin_number_input">
+            <input type="text" v-model="vin" placeholder="请输入车辆识别代码">
+            <div class="vin_number_photograph"><van-icon name="photograph" /></div>
+        </div>
+        <div class="vin_number_desc">
+            向下滚动页面，了解如何获取车辆识别代码。
+        </div>
+        <div class="vin_number_btn">
+            发布车辆
+        </div>
+        <div class="vin_number_info">
+            *车辆识别代码就是汽车的身份证号，它根据国家车辆管理标准确定，包含了车辆的生产厂家、年代、车型、车身型式及代码、发动机代码及组装地点等信息。俗称“车架号”“17码”“VIN码”等。
+        </div>
+    </div>
+    <div class="draft_box">
+        <div class="draft_title">
+            <div class="draft_top_title">车辆草稿箱</div>
+            <div class="draft_top_desc">没有车辆识别代码？提前保存车辆信息，之后调用。</div>
+        </div>
+        <div class="draft_list_box">
+            <div class="draft_list">
+                <div class="draft_item" style="background:#007AFF;">
+                    <div class="draft_item_add_icon">
+                        <van-icon name="plus" />
+                    </div>
+                    <div class="draft_item_add">
+                        添加新草稿
+                    </div>
+                </div>
+                <div class="draft_item" v-for="(item,ind) in draftList" :key="ind" >
+                    <div class="draft_item_title">{{item.time}}创建</div>
+                    <div class="draft_item_info">品牌车系:{{item.pinpai}}</div>
+                    <div class="draft_item_info">车身颜色:{{item.color}}</div>
+                    <div class="draft_item_info">档位类型:{{item.dangwei}}</div>
+                    <div class="draft_item_info">汽车排量:{{item.pailiang}}</div>
+                    <div class="draft_item_btn">
+                        编辑此信息
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="draft_help">
+        <div class="draft_help_title">
+            如何查找车辆识别代码？
+        </div>
+        <div class="draft_help_group">
+            <div class="draft_help_group_title">
+                方法一:在车辆行驶证/车辆登记证书上查看
+            </div>
+            <div class="draft_help_group_desc"></div>
+            <div class="draft_help_group_img">
+                <img src="./images/group1_1.png" alt="">
+                <div class="draft_help_group_img_title">在机动车行驶证上查看(举例)</div>
+            </div>
+            <div class="draft_help_group_img">
+                <img src="./images/group1_1.png" alt="">
+                <div class="draft_help_group_img_title">在车辆登记证书上查看(举例)</div>
+            </div>
+        </div>
+        <div class="draft_help_group">
+            <div class="draft_help_group_title">
+                方法二:在车辆车身上查看
+            </div>
+            <div class="draft_help_group_desc">*不同车辆车架号展示位置不同，找不到请查看车辆说明书或咨询车辆品牌客服</div>
+            <div class="draft_help_group_img">
+                <img src="./images/group1_1.png" alt="">
+                <div class="draft_help_group_img_title">在机动车行驶证上查看(举例)</div>
+            </div>
+            <div class="draft_help_group_img">
+                <img src="./images/group1_1.png" alt="">
+                <div class="draft_help_group_img_title">在车辆登记证书上查看(举例)</div>
+            </div>
+        </div>
+        <div class="draft_help_group">
+            <div class="draft_help_group_title">
+                方法三:在其他位置查看、如车辆保险单等(不做示例)
+            </div>
+            <div class="draft_help_group_desc"></div>
+        </div>
+    </div>
+</div>
+</body>
+
+
+
+<script>
+    var Vue = window.Vue;
+    var vant = window.vant;
+
+    new Vue({
+        el: '#app',
+        data: function() {
+            return {
+                draftList: [{
+                    time: '2018年12月25日',
+                    pinpai: '奥迪A6',
+                    color: '黑色',
+                    dangwei: '自动挡',
+                    pailiang: '1.8T'
+                },{
+                    time: '2018年12月25日',
+                    pinpai: '奥迪A6',
+                    color: '黑色',
+                    dangwei: '自动挡',
+                    pailiang: '1.8T'
+                },{
+                    time: '2018年12月25日',
+                    pinpai: '奥迪A6',
+                    color: '黑色',
+                    dangwei: '自动挡',
+                    pailiang: '1.8T'
+                },{
+                    time: '2018年12月25日',
+                    pinpai: '奥迪A6',
+                    color: '黑色',
+                    dangwei: '自动挡',
+                    pailiang: '1.8T'
+                },{
+                    time: '2018年12月25日',
+                    pinpai: '奥迪A6',
+                    color: '黑色',
+                    dangwei: '自动挡',
+                    pailiang: '1.8T'
+                },{
+                    time: '2018年12月25日',
+                    pinpai: '奥迪A6',
+                    color: '黑色',
+                    dangwei: '自动挡',
+                    pailiang: '1.8T'
+                },{
+                    time: '2018年12月25日',
+                    pinpai: '奥迪A6',
+                    color: '黑色',
+                    dangwei: '自动挡',
+                    pailiang: '1.8T'
+                }],
+                vin: '',
+                zoom: 1
+            }
+        },
+        created() {
+            const windowWidth = window.screen.width
+            this.zoom = windowWidth / 375
+        },
+        mounted() {
+        },
+        methods: {
+
+        }
+    })
+</script>
+</html>

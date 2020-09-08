@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <!--移动端配置-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="Cache-Control" content="max-age=0">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <!-- 是否启用 WebApp 全屏模式，删除苹果默认的工具栏和菜单栏 -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <!-- 设置苹果工具栏颜色 -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <!-- 忽略页面中的数字识别为电话，忽略email识别 -->
+    <meta name="format-detection" content="telphone=no, email=no">
+
+    <!-- 引入组件 -->
+    <script src="js/vue.js"></script>
+    <script src="js/vant.js"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="js/vant.css">
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+        #app {
+            padding-bottom:50px;
+            background:rgba(247,247,247,1);
+        }
+        .banner_item,.banner_list{
+            height:160px;
+            background:#fff;
+        }
+        .banner_item img{
+            height:100%;
+            display: block;
+            margin:0 auto;
+            padding:0;
+        }
+        .menu_parent{
+            background:#fff;
+        }
+        .menu_child{
+            background:#EAECEE;
+        }
+        .children_list{
+            background:#EAECEE;
+        }
+        .menu_item{
+            min-height:81px;
+            padding:12px 0;
+            overflow: hidden;
+        }
+        .menu_icon{
+            width:48px;
+            height:48px;
+            margin:0 auto;
+            display: block;
+        }
+        .menu_title{
+            padding-top:7px;
+            height:18px;
+            line-height: 18px;
+            text-align: center;
+            font-size:12px;
+            font-weight:400;
+            color:rgba(17,17,17,1);
+        }
+        .active.menu_item{
+            background:#EAECEE;
+        }
+        .group_box{
+            padding-bottom:8px;
+            margin-top:8px;
+            background:#fff;
+        }
+        .group_title{
+            margin:0 16px;
+            position: relative;
+            font-size:16px;
+            font-weight:600;
+            color:rgba(42,48,60,1);
+            line-height:44px;
+        }
+        .group_line{
+            width:3px;
+            height:16px;
+            background:rgba(32,125,225,1);
+            position:absolute;
+            left:0;
+            top:50%;
+            margin-top:-8px;
+        }
+        .bottom_boxshadow{
+            position:fixed;
+            bottom:48px;
+            left:0;
+            right:0;
+            height:1px;
+            box-shadow:0px -2px 6px 0px rgba(0,0,0,0.05);
+        }
+        .bottom_copy_right{
+            padding-top:24px;
+            padding-bottom:8px;
+            text-align: center;
+            font-size:10px;
+            font-weight:400;
+            color:rgba(164,171,179,1);
+            line-height:14px;
+        }
+        .van-icon.van-icon-icon_ejt,
+        .van-icon.van-icon-icon_my{
+            width:20px;
+            height:20px;
+        }
+        .van-icon.van-icon-icon_ejt{
+            background-image: url("./images/icon_ejt_default.png");
+            background-size:100% 100%;
+            background-repeat: no-repeat no-repeat;
+            background-position: 0 0;
+        }
+        .van-tabbar-item--active .van-icon-icon_ejt{
+            background-image: url("./images/icon_ejt_active.png");
+            background-size:100% 100%;
+            background-repeat: no-repeat no-repeat;
+            background-position: 0 0;
+        }
+        .van-icon.van-icon-icon_my{
+            background-image: url("./images/icon_my_default.png");
+            background-size:100% 100%;
+            background-repeat: no-repeat no-repeat;
+            background-position: 0 0;
+        }
+        .van-tabbar-item--active .van-icon-icon_my{
+            background-image: url("./images/icon_my_active.png");
+            background-size:100% 100%;
+            background-repeat: no-repeat no-repeat;
+            background-position: 0 0;
+        }
+        .van-tabbar-item__text{
+            font-size:10px;
+        }
+        .top_menu{
+            display: flex;
+            padding:16px;
+            background:#fff;
+        }
+        .top_menu_item{
+            flex:1;
+        }
+        .top_menu_img{
+            margin:0 auto;
+            height:67px;
+            width:165px;
+        }
+
+        .img_1{
+            background-image: url("./images/top_menu_1.png");
+            background-size:165px 67px;
+            background-repeat: no-repeat no-repeat;
+            background-position: 0 0;
+        }
+        .img_2{
+            background-image: url("./images/top_menu_2.png");
+            background-size:165px 67px;
+            background-repeat: no-repeat no-repeat;
+            background-position: 0 0;
+        }
+    </style>
+</head>
+<body>
+<div id="app" v-cloak>
+    <div class="banner_list" :style="'zoom:'+zoom">
+        <van-swipe :autoplay="3000">
+            <van-swipe-item v-for="(image, index) in images" :key="index">
+                <div class="banner_item">
+                    <img :src="image" />
+                </div>
+            </van-swipe-item>
+        </van-swipe>
+    </div>
+    <div class="top_menu">
+        <div class="top_menu_item">
+            <div class="top_menu_img img_1"></div>
+        </div>
+        <div class="top_menu_item">
+            <div class="top_menu_img img_2"></div>
+        </div>
+    </div>
+    <div>
+        <div v-for="(group, g) in groupList" :key="g" class="group_box">
+            <div class="group_title" v-if="group.groupName">{{group.groupName}}</div>
+            <div v-for="(itt, r) in getGroupMenuRow(g)" :key="r">
+                <van-row>
+                    <van-col :span="parseInt(24/step)" v-for="(itt1,c) in (r===getGroupMenuRow(g)-1&&group.menuList.length%step!==0?groupList.length%step:step)" :key="c">
+                        <div @click="chooseMenu(g,r,c,group.menuList[r*step+c])" :class="'menu_item menu_parent ' + (openGroupIndex === g && openMenuIndex === r*step+c?'active':'')">
+                            <img class="menu_icon" :src="'./images/menuIcon/'+group.menuList[r*step+c].menuName+'.png'"/>
+                            <div class="menu_title">{{group.menuList[r*step+c].menuName}}</div>
+                        </div>
+                    </van-col>
+                </van-row>
+                <div class="children_list" v-if="openGroupIndex === g && openMenuIndex === r*step+c" v-for="(itt1,c) in (r===getGroupMenuRow(g)-1&&group.menuList.length%step!==0?groupList.length%step:step)" :key="c">
+                    <van-row>
+                        <van-col :span="parseInt(24/step)" v-for="(item,index) in group.menuList[r*step+c].children" :key="index">
+                            <div class="menu_item menu_child" @click="menuClickEvent(item)">
+                                <img class="menu_icon" :src="'./images/menuIcon/'+item.menuName+'.png'"/>
+                                <div class="menu_title">{{item.menuName}}</div>
+                            </div>
+                        </van-col>
+                    </van-row>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="bottom_copy_right">版权所有:山东省公安厅</div>
+    <div class="bottom_boxshadow"></div>
+    <van-tabbar
+        v-model="active"
+        active-color="#111111"
+        inactive-color="#A4ABB3"
+    >
+        <van-tabbar-item icon="icon_ejt">e警通</van-tabbar-item>
+        <van-tabbar-item icon="icon_my">个人中心</van-tabbar-item>
+    </van-tabbar>
+</div>
+</body>
+
+
+
+<script>
+    var Vue = window.Vue;
+    var vant = window.vant;
+
+    Vue.use(vant.Lazyload);
+
+    new Vue({
+        el: '#app',
+        data: function() {
+            return {
+                step: 4,
+                rowLength: 0,
+                openMenuIndex: -1,
+                openGroupIndex: -1,
+                groupList: [{
+                    groupName: '热门应用',
+                    menuList: [{
+                        menuName: '重名查询',
+                        type: 'isLink',
+                        link: 'a',
+                        children: []
+                    }, {
+                        menuName: '驾驶证信息',
+                        type: 'isLink',
+                        link: 'a',
+                        children: []
+                    }, {
+                        menuName: '交通违法处理',
+                        type: 'isLink',
+                        link: 'a',
+                        children: []
+                    }, {
+                        menuName: '出入境预约',
+                        type: 'isLink',
+                        link: 'a',
+                        children: []
+                    }, {
+                        menuName: '无犯罪证明',
+                        type: 'isLink',
+                        link: 'a',
+                        children: []
+                    }, {
+                        menuName: '家属预约会见',
+                        type: 'isLink',
+                        link: 'a',
+                        children: []
+                    }, {
+                        menuName: '证件照片下载',
+                        type: 'isLink',
+                        link: 'a',
+                        children: []
+                    }, {
+                        menuName: '身份证信息',
+                        type: 'isLink',
+                        link: 'a',
+                        children: []
+                    }]
+                }, {
+                    groupName: '全部业务',
+                    menuList: [{
+                        menuName: '户籍业务',
+                        type: 'isParent',
+                        children: [{
+                            menuName: '登记注销',
+                            type: 'isLink',
+                            link: 'a'
+                        },{
+                            menuName: '户口迁移',
+                            type: 'isLink',
+                            link: 'a'
+                        },{
+                            menuName: '变更更正',
+                            type: 'isLink',
+                            link: 'a'
+                        },{
+                            menuName: '居住证业务',
+                            type: 'isLink',
+                            link: 'a'
+                        }]
+                    }, {
+                        menuName: '监管业务',
+                        type: 'isParent',
+                        children: [{
+                            menuName: '家属预约会见',
+                            type: 'isLink',
+                            link: 'a'
+                        },{
+                            menuName: '律师预约会见',
+                            type: 'isLink',
+                            link: 'a'
+                        }]
+                    }, {
+                        menuName: '出入境业务',
+                        type: 'isParent',
+                        children: [{
+                            menuName: '预约办理',
+                            type: 'isLink',
+                            link: 'a'
+                        },{
+                            menuName: '港澳台旅游',
+                            type: 'isLink',
+                            link: 'a'
+                        },{
+                            menuName: '办理进度查询',
+                            type: 'isLink',
+                            link: 'a'
+                        }]
+                    }, {
+                        menuName: '交通出行',
+                        type: 'isParent',
+                        children: [{
+                            menuName: '罚单缴款',
+                            type: 'isLink',
+                            link: 'a'
+                        },{
+                            menuName: '扣分+缴款',
+                            type: 'isLink',
+                            link: 'a'
+                        },{
+                            menuName: '违法查询',
+                            type: 'isLink',
+                            link: 'a'
+                        },{
+                            menuName: '他人代缴',
+                            type: 'isLink',
+                            link: 'a'
+                        }]
+                    }, {
+                        menuName: '警务公开',
+                        type: 'isParent',
+                        children: [{
+                            menuName: '警务资讯',
+                            type: 'isLink',
+                            link: 'a'
+                        }, {
+                            menuName: '案件信息查询',
+                            type: 'isLink',
+                            link: 'a'
+                        }]
+                    }, {
+                        menuName: '便民服务',
+                        type: 'isParent',
+                        link: 'a',
+                        children: [{
+                            menuName: '诉求查询',
+                            type: 'isLink',
+                            link: 'a'
+                        }, {
+                            menuName: '户政联系方式',
+                            type: 'isLink',
+                            link: 'a'
+                        }, {
+                            menuName: '车辆号牌查询',
+                            type: 'isLink',
+                            link: 'a'
+                        }, {
+                            menuName: 'EMS查询',
+                            type: 'isLink',
+                            link: 'a'
+                        }]
+                    }, {
+                        menuName: '网点查询',
+                        type: 'isLink',
+                        link: 'a',
+                        children: []
+                    }, {
+                        menuName: '齐鲁警侨',
+                        type: 'isLink',
+                        link: 'a',
+                        children: []
+                    }, {
+                        menuName: '留言咨询',
+                        type: 'isLink',
+                        link: 'a',
+                        children: []
+                    }, {
+                        menuName: '投诉举报',
+                        type: 'isParent',
+                        link: 'a',
+                        children: [{
+                            menuName: '我要投诉',
+                            type: 'isLink',
+                            link: 'a'
+                        }, {
+                            menuName: '我要举报',
+                            type: 'isLink',
+                            link: 'a'
+                        }]
+                    }, {
+                        menuName: '建议反馈',
+                        type: 'isParent',
+                        link: 'a',
+                        children: [{
+                            menuName: '我要建议',
+                            type: 'isLink',
+                            link: 'a'
+                        }, {
+                            menuName: '使用反馈',
+                            type: 'isLink',
+                            link: 'a'
+                        }]
+                    }, {
+                        menuName: '爱山东APP',
+                        type: 'isLink',
+                        link: 'a',
+                        children: []
+                    }]
+                }],
+                images: [
+                    'images/banner1.png'
+                ],
+                active: 0,
+                zoom: 1
+            }
+        },
+        created() {
+            const windowWidth = window.screen.width
+            this.zoom = windowWidth / 375
+        },
+        mounted() {
+        },
+        methods: {
+            getGroupMenuRow(g) {
+                const rowLength = this.groupList[g].menuList.length % this.step ===0 ? parseInt(this.groupList[g].menuList.length / this.step) : (parseInt(this.groupList[g].menuList.length / this.step) + 1)
+                return rowLength
+            },
+            chooseMenu(g, r, c, item) {
+                if (g === this.openGroupIndex && this.openMenuIndex === r * this.step + c) {
+                    this.openGroupIndex = -1
+                    this.openMenuIndex = -1
+                } else {
+                    this.openGroupIndex = g
+                    this.openMenuIndex = r * this.step + c
+                }
+                this.menuClickEvent(item)
+            },
+            menuClickEvent(item) {
+                if (item.type === 'isLink') {
+                    alert('点击菜单'+ item.menuName + '，链接为：' + item.link)
+                }
+            },
+        }
+    })
+</script>
+</html>

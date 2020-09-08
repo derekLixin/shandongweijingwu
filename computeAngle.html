@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+
+</head>
+<body>
+</div>
+<script>
+    function computeJD(px, py, mx, my) {//获得人物中心和鼠标坐标连线，与y轴正半轴之间的夹角
+        var x = Math.abs(px - mx);
+        var y = Math.abs(py - my);
+        var z = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+        var cos = y / z;
+        var radina = Math.acos(cos);//用反三角函数求弧度
+        var angle = Math.floor(180 / (Math.PI / radina));//将弧度转换成角度
+        if (mx > px && my == py) {//在x轴正方向上
+            angle = 0;
+        }
+        if (mx == px && my > py) {//在y轴正方向上
+            angle = 90;
+        }
+        if (mx < px && my == py) {//在x轴负方向上
+            angle = 180;
+        }
+        if (mx == px && my < py) {//在y轴负方向上
+            angle = 270;
+        }
+        if (mx > px && my > py) {//在第一象限
+            angle = 90 - angle;
+        }
+        if (mx < px && my > py) {//在第二象限
+            angle = 90 + angle;
+        }
+        if (mx < px && my < py) {//在第三象限
+            angle = 270 - angle
+        }
+        if (mx > px && my < py) {//在第四象限
+            angle = 270 + angle;
+        }
+        return angle;
+    }
+
+    function computeAngle(centerPoint, pointA, pointB) {
+        let angle = 0
+        const dx1 = pointA.x - centerPoint.x
+        const dy1 = pointA.y - centerPoint.y
+
+        const dx2 = pointB.x - centerPoint.x
+        const dy2 = pointB.y - centerPoint.y
+        console.log(dx1, dy1, dx2, dy2)
+        let c = Math.sqrt(dx1 * dx1 + dy1 * dy1) * Math.sqrt(dx2 * dx2 + dy2 * dy2)
+
+        if (c == 0) {
+            angle = -1
+        } else {
+            angle = Math.acos((dx1 * dx2 + dy1 * dy2) / c)
+        }
+
+        if (dx2 > dx1 && dy2 > dy1) {//鼠标在第四象限
+            angle = 180 - angle;
+        }
+
+        if (dx2 == dx1 && dy2 > dy1) {//鼠标在y轴负方向上
+            angle = 180;
+        }
+
+        if (dx2 > dx1 && dy2 == dy1) {//鼠标在x轴正方向上
+            angle = 90;
+        }
+
+        if (dx2 < dx1 && dy2 > dy1) {//鼠标在第三象限
+            angle = 180 + angle;
+        }
+
+        if (dx2 < dx1 && dy2 == dy1) {//鼠标在x轴负方向
+            angle = 270;
+        }
+
+        if (dx2 < dx1 && dy2 < dy1) {//鼠标在第二象限
+            angle = 360 - angle;
+        }
+
+
+        return 180 / Math.PI * angle
+    }
+
+    console.log(computeJD(0, 0, 1, 1))
+    // console.log(computeAngle({x: 0,y: 0},{x: 0,y: 1},{x: 1,y: 1}))
+    // console.log(computeAngle({x: 0,y: 0},{x: 0,y: 1},{x: 1,y: 0}))
+    // console.log(computeAngle({x: 0,y: 0},{x: 0,y: 1},{x: 1,y: -1}))
+    // console.log(computeAngle({x: 0,y: 0},{x: 0,y: 1},{x: 0,y: -1}))
+    // console.log(computeAngle({x: 0,y: 0},{x: 0,y: 1},{x: -1,y: -1}))
+    // console.log(computeAngle({x: 0,y: 0},{x: 0,y: 1},{x: -1,y: 0}))
+    // console.log(computeAngle({x: 0,y: 0},{x: 0,y: 1},{x: -1,y: 1}))
+</script>
+
+</body>
+</html>

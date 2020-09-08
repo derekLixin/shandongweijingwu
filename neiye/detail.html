@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <!--移动端配置-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="Cache-Control" content="max-age=0">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <!-- 是否启用 WebApp 全屏模式，删除苹果默认的工具栏和菜单栏 -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <!-- 设置苹果工具栏颜色 -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <!-- 忽略页面中的数字识别为电话，忽略email识别 -->
+    <meta name="format-detection" content="telphone=no, email=no">
+</head>
+<body>
+<div id="app" style="height: calc(100vh)">
+    <div class="edit_box_info">
+        <van-cell-group style="width:100%;">
+            <van-cell title="车辆类型：" is-link :value="columns.filter(item => item.id===type).length>0?columns.filter(item => item.id===type)[0].name:''" @click="typeListShow = true" :border="true"></van-cell>
+            <van-field label="车牌号码：鲁" maxlength="7" input-align="right" v-model="carNumber" placeholder="车牌号" :border="true" @input="checkCarNumber"></van-field>
+            <van-field label="发动机号：" maxlength="6" input-align="right" v-model="fdj" placeholder="发动机后六位" :border="false" @input="checkFDJ"></van-field>
+        </van-cell-group>
+    </div>
+    <div class="edit_btn_box">
+        <div class="edit_btn">添加</div>
+    </div>
+    <div class="edit_wxts">
+        <div class="edit_wxts_title">温馨提示</div>
+        <div class="edit_wxts_info">
+            <p>1.目前支持添加山东省内的小型汽车和大型汽车；</p>
+            <p>2.运营车辆和大型汽车只能对违法进行查询，不能处理；</p>
+            <p> 3.发动机号后6位区分大小写，包含特殊字符。</p>
+        </div>
+    </div>
+    <van-popup
+            v-model="typeListShow"
+            position="bottom"
+            :close-on-click-overlay="false"
+    >
+        <van-picker
+                show-toolbar
+                :columns="columns"
+                value-key="name"
+                @cancel="typeListShow = false"
+                @confirm="onConfirm"
+        ></van-picker>
+    </van-popup>
+</div>
+</body>
+<!-- 引入样式 -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@2.1/lib/index.css">
+<style>
+    @font-face{
+        font-family: 'DIN-D';
+        src: url('font/DIN-Black.eot');
+        src: url('font/DIN-Black.woff') format('woff'),
+        url('font/DIN-Black.ttf') format('truetype'),
+        url('font/DIN-Black.svg') format('svg');
+    }
+    #app {
+        width:100%;
+        position:relative;
+        background:rgba(247,247,247,1);
+    }
+    .van-cel{
+        color:#2A303C!important;
+    }
+    .edit_btn{
+        height:44px;
+        background:rgba(80,160,248,1);
+        border-radius:4px;
+        margin: 0 16px;
+        font-size:16px;
+        font-family:DIN-D;
+        font-weight:400;
+        color:rgba(255,255,255,1);
+        line-height:44px;
+        text-align: center;
+    }
+    .edit_btn_box{
+        padding:32px 0;
+    }
+    .edit_wxts{
+        padding:0 16px;
+    }
+    .edit_wxts_title{
+        height:20px;
+        font-size:14px;
+        font-family:DIN-D;
+        font-weight:600;
+        color:rgba(80,160,248,1);
+        line-height:20px;
+        padding-bottom:4px;
+    }
+    .edit_wxts_info{
+        font-size:12px;
+        font-family:DIN-D;
+        font-weight:400;
+        color:rgba(164,171,179,1);
+        line-height:18px;
+    }
+</style>
+
+<!-- 引入组件 -->
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vant@2.1/lib/vant.min.js"></script>
+
+<script>
+    var Vue = window.Vue;
+    var vant = window.vant;
+
+    Vue.use(vant.Lazyload);
+
+    new Vue({
+        el: '#app',
+        data: function() {
+            return {
+                type: '1',
+                columns: [{
+                    id: '1',
+                    name: '汽车1'
+                },{
+                    id: '2',
+                    name: '汽车2'
+                }],
+                carNumber: '',
+                fdj: '',
+                typeListShow: false
+            }
+        },
+        mounted() {
+        },
+        methods: {
+            onConfirm(value) {
+                this.type = value.id
+                this.typeListShow = false
+            },
+            checkCarNumber() {
+                console.log('checkCarNumber')
+                let number = this.carNumber.toLocaleUpperCase().replace(/ /ig,'')
+                number = number.replace(/[^A-Za-z0-9]/ig,'')
+                number = number.replace(/[I|O]/ig, '')
+                this.carNumber = number
+            },
+            checkFDJ() {
+                console.log('checkFDJ')
+                let fdj = this.fdj.toLocaleUpperCase().replace(/ /ig,'')
+                fdj = fdj.replace(/[^A-Za-z0-9]/ig,'')
+                this.fdj = fdj
+            }
+        }
+    })
+</script>
+</html>

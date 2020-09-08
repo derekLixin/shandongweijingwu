@@ -1,0 +1,1385 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <!--移动端配置-->
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="Cache-Control" content="max-age=0">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <!-- 是否启用 WebApp 全屏模式，删除苹果默认的工具栏和菜单栏 -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <!-- 设置苹果工具栏颜色 -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <!-- 忽略页面中的数字识别为电话，忽略email识别 -->
+    <meta name="format-detection" content="telphone=no, email=no">
+
+
+    <script src="js/vue.js"></script>
+    <!-- 引入组件 -->
+    <script src="js/swiper.min.js"></script>
+    <script src="js/vue-awesome-swiper.js"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="js/swiper.min.css">
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="js/elementui.css">
+    <!-- 引入组件库 -->
+    <script src="js/elementui.js"></script>
+
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+        }
+
+        [v-cloak] {
+            display: none;
+        }
+
+        body {
+            background-color: #f7f7f7;
+        }
+
+        .swiper {
+            width: 1180px;
+            height: 108px;
+            position:relative;
+            margin:24px auto 48px auto;
+            padding:16px;
+        }
+        .swiper1 {
+            width: 940px;
+            height: 80px;
+            position:relative;
+        }
+
+        .swiper .swiper-slide.slider_card {
+            line-height: 108px;
+            height:108px;
+            text-align: center;
+            background:rgba(255,255,255,1);
+        }
+
+        .pc_title {
+            position: absolute;
+            left: 16px;
+            right: 16px;
+            top: 53px;
+            font-size: 16px;
+            font-family: SourceHanSansSC-Bold, SourceHanSansSC;
+            font-weight: bold;
+            color: rgba(255, 255, 255, 1);
+            line-height: 24px;
+            text-align: center;
+        }
+
+        .pc_close {
+            position: absolute;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 1);
+            height: 14px;
+            width: 14px;
+            top: 16px;
+            right: 16px;
+            text-align: right;
+            background-image: url("./images/icon_close.png");
+            background-size: 14px 14px;
+            background-repeat: no-repeat no-repeat;
+            background-position: 0 0;
+            cursor: pointer;
+        }
+
+        #ad {
+            position: fixed;
+            z-index: 10000;
+            width: 300px;
+            height: 184px;
+        }
+
+        .pc_info {
+            position: absolute;
+            top: 85px;
+            bottom: 22px;
+            left: 16px;
+            right: 16px;
+            font-size: 14px;
+            font-family: SourceHanSansSC-Normal, SourceHanSansSC;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 1);
+            line-height: 20px;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 4;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .home_header {
+            height: 176px;
+            background: linear-gradient(90deg, rgba(0, 73, 182, 1) 0%, rgba(55, 146, 250, 1) 100%);
+        }
+
+        .container {
+            width: 1180px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .home_header_row {
+            padding: 12px 0 20px 5px;
+            height: 24px;
+            font-size: 16px;
+            font-family: SourceHanSansSC-Normal, SourceHanSansSC;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 1);
+            line-height: 24px;
+        }
+
+        .home_header_row_left {
+            float: left;
+            text-align: left;
+        }
+
+        .home_header_row_right {
+            float: right;
+            text-align: right;
+        }
+
+        .home_header_row_right span {
+            cursor: pointer;
+        }
+
+        .home_header_logo {
+            height: 64px;
+            background-image: url("./images/top_logo.png");
+            background-size: 185px 64px;
+            background-repeat: no-repeat no-repeat;
+            background-position: 0 0;
+            padding-bottom: 8px;
+            width: 185px;
+        }
+
+        .home_header_menu_box {
+            height: 48px;
+            position: relative;
+            z-index: 101;
+        }
+
+        .home_header_menu_box_1 {
+            position: relative;
+        }
+
+        .home_header_menu_item {
+            height: 48px;
+            line-height: 48px;
+            width: 120px;
+            margin-right: 24px;
+            text-align: center;
+            font-size: 18px;
+            font-family: SourceHanSansSC-Normal, SourceHanSansSC;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 1);
+            position: relative;
+            float: left;
+            cursor: pointer;
+        }
+
+        .home_header_menu_item.active i, .home_header_menu_item:hover i {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            margin-left: -24px;
+            width: 48px;
+            height: 4px;
+            background: rgba(255, 255, 255, 1);
+        }
+
+        .home_center {
+            height: 728px;
+            background-image: url("./images/center_bg.png");
+            background-size: 1920px 728px;
+            background-repeat: no-repeat no-repeat;
+            background-position: center 0;
+        }
+
+        .center_box {
+            padding: 32px 0;
+            position: relative;
+        }
+
+        .center_box_container {
+            border: 12px solid #fff;
+            position: relative;
+            box-sizing: border-box;
+            height: 664px;
+            background-image: url("./images/center_box_bg.png");
+            background-size: 1156px 640px;
+            background-repeat: no-repeat no-repeat;
+            background-position: center 0;
+        }
+
+        .center_box_ewm_btn {
+            cursor: pointer;
+            width: 104px;
+            height: 104px;
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            background-image: url("./images/icon_ewm.png");
+            background-size: 104px 104px;
+            background-repeat: no-repeat no-repeat;
+            background-position: center 0;
+            z-index: 98;
+        }
+
+        .center_box_mask {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+        }
+
+        .center_box_mask.active {
+            display: block;
+        }
+
+        .center_box_content {
+            top: 191px;
+            position: absolute;
+            left: 449px;
+            width: 258px;
+            height: 258px;
+            background-color: #fff;
+            border-radius: 2px;
+            background-image: url("./images/ewm_content.png");
+            background-size: 258px 258px;
+            background-repeat: no-repeat no-repeat;
+            background-position: center 0;
+        }
+
+        .center_box_close {
+            width: 24px;
+            height: 24px;
+            position: absolute;
+            background-image: url("./images/close_circle.png");
+            background-size: 24px 24px;
+            background-repeat: no-repeat no-repeat;
+            background-position: center 0;
+            top: 135px;
+            left: 686px;
+            cursor: pointer;
+        }
+
+        .center_box_line {
+            width: 2px;
+            height: 32px;
+            background: rgba(255, 255, 255, 1);
+            position: absolute;
+            left: 697px;
+            top: 159px;
+        }
+
+        .home_header_menu_box_container {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 48px;
+        }
+
+        .children_menu_box {
+            background: linear-gradient(90deg, rgba(0, 73, 182, 1) 0%, rgba(55, 146, 250, 1) 100%);
+            padding: 32px 0 20px 0;
+        }
+
+        .children_menu_list {
+            margin-right: -20px;
+        }
+
+        .children_menu_item {
+            width: 220px;
+            margin: 0 0 20px 0;
+            height: 48px;
+            background: rgba(79, 163, 255, 1);
+            float: left;
+            font-size: 16px;
+            font-family: SourceHanSansSC-Normal, SourceHanSansSC;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 1);
+            line-height: 48px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .clear {
+            clear: both;
+        }
+
+        .children_menu_item.hasChildren.active {
+            height: 68px;
+            margin-bottom: 8px;
+        }
+
+        .children_children_box {
+            width: 1160px;
+            background: rgba(79, 163, 255, 1);
+            float: left;
+            position: relative;
+            margin-top: -20px;
+            margin-bottom: 20px;
+            padding-left: 20px;
+            padding-top: 20px;
+            padding-bottom: 10px;
+        }
+
+        .children_menu_item.hasChildren i {
+            width: 16px;
+            height: 16px;
+            display: inline-block;
+            background-image: url("./images/select_closed.png");
+            background-size: 16px 16px;
+            background-repeat: no-repeat no-repeat;
+            background-position: center 0;
+            margin-left: 8px;
+            margin-top: -2px;
+            margin-bottom: -2px;
+        }
+
+        .children_menu_item.hasChildren.active i {
+            width: 16px;
+            height: 16px;
+            display: inline-block;
+            background-image: url("./images/select_closed.png");
+            background-size: 16px 16px;
+            background-repeat: no-repeat no-repeat;
+            background-position: center 0;
+            margin-left: 8px;
+            margin-top: -2px;
+            margin-bottom: -2px;
+            transform: rotate(180deg);
+            -ms-transform: rotate(180deg); /* IE 9 */
+            -moz-transform: rotate(180deg); /* Firefox */
+            -webkit-transform: rotate(180deg); /* Safari 和 Chrome */
+            -o-transform: rotate(180deg);
+        }
+
+        .children_children_item {
+            background: rgba(56, 136, 255, 1);
+            box-shadow: 0px 2px 4px 0px rgba(0, 120, 255, 0.2);
+            border-radius: 4px;
+            width: 144px;
+            height: 40px;
+            margin: 0 20px 10px 0;
+            font-size: 14px;
+            font-family: SourceHanSansSC-Bold, SourceHanSansSC;
+            font-weight: bold;
+            color: rgba(255, 255, 255, 1);
+            line-height: 40px;
+            text-align: center;
+            float: left;
+            cursor: pointer;
+        }
+        .center_title{
+            height:130px;
+            background-image: url("./images/center_title.png");
+            background-size: 481px 130px;
+            background-repeat: no-repeat no-repeat;
+            background-position: center 0;
+            position:absolute;
+            left:0;
+            right:0;
+            top:66px;
+            animation:showName 3s;
+            -moz-animation:showName 3s; /* Firefox */
+            -webkit-animation:showName 3s; /* Safari and Chrome */
+            -o-animation:showName 3s; /* Opera */
+        }
+        @keyframes showName
+        {
+            0%   {opacity:0;top:0;}
+            25%  {opacity:0;top:0;}
+            50%  {opacity:0.5;top:66px;}
+            100% {opacity:1;top:66px;}
+        }
+        @-moz-keyframes showName /* Firefox */
+        {
+            0%   {opacity:0;top:0;}
+            25%  {opacity:0;top:0;}
+            50%  {opacity:0.5;top:66px;}
+            100% {opacity:1;top:66px;}
+        }
+
+        @-webkit-keyframes showName /* Safari and Chrome */
+        {
+            0%   {opacity:0;top:0;}
+            25%  {opacity:0;top:0;}
+            50%  {opacity:0.5;top:66px;}
+            100% {opacity:1;top:66px;}
+        }
+
+        @-o-keyframes showName /* Opera */
+        {
+            0%   {opacity:0;top:0;}
+            25%  {opacity:0;top:0;}
+            50%  {opacity:0.5;top:66px;}
+            100% {opacity:1;top:66px;}
+        }
+        .center_menu_box{
+            position:absolute;
+            bottom:82px;
+            left:28px;
+            right:8px;
+            height:120px;
+        }
+        .center_menu_item{
+            width:120px;
+            height:120px;
+            background:rgba(255,255,255,1);
+            border-radius:4px;
+            border:4px solid rgba(211,235,255,1);
+            float:left;
+            margin-right:20px;
+            position:relative;
+            box-sizing: border-box;
+            cursor: pointer;
+        }
+        .center_menu_icon{
+            width:40px;
+            height:40px;
+            position:absolute;
+            top:24px;
+            left:50%;
+            margin-left:-20px;
+        }
+        .center_menu_title{
+            position:absolute;
+            bottom:16px;
+            left:0;
+            right:0;
+            text-align: center;
+            font-size:16px;
+            font-family:SourceHanSansSC-Bold,SourceHanSansSC;
+            font-weight:bold;
+            color:rgba(34,34,34,1);
+            line-height:24px;
+        }
+        .center_children_box{
+            position:absolute;
+            left:116px;
+            top:-4px;
+            height:120px;
+            z-index:100;
+        }
+        .center_children_container{
+            position:relative;
+        }
+        .center_children_left{
+            width:10px;
+            height:120px;
+            position:absolute;
+            left:-10px;
+            top:0;
+            background-image: url("./images/sanjiao_left.png");
+            background-size: 10px 120px;
+            background-repeat: no-repeat no-repeat;
+            background-position: center 0;
+        }
+        .center_children_right{
+            width:10px;
+            height:120px;
+            position:absolute;
+            right:-10px;
+            top:0;
+            background-image: url("./images/sanjiao_right.png");
+            background-size: 10px 120px;
+            background-repeat: no-repeat no-repeat;
+            background-position: center 0;
+        }
+        .center_children_center{
+            padding:4px 14px;
+            word-break: keep-all;
+            white-space: nowrap;
+            background:#3888FF;
+            height:120px;
+            box-sizing: border-box;
+        }
+        .center_children_group{
+            display: inline-block;
+            position:relative;
+        }
+        .center_children_item{
+            min-width:80px;
+            height:40px;
+            background:rgba(255,255,255,1);
+            border-radius:20px;
+            font-size:14px;
+            font-family:SourceHanSansSC-Normal,SourceHanSansSC;
+            font-weight:400;
+            color:rgba(34,34,34,1);
+            line-height:40px;
+            margin:8px 6px;
+            padding:0 20px;
+            text-align: center;
+            cursor: pointer;
+        }
+        .center_menu_icon img{
+            width:40px;
+            height:40px;
+            display: block;
+            padding:0;
+            margin:0;
+        }
+        .center_bottom{
+            width:1100px;
+            height:48px;
+            background:rgba(255,255,255,0.4);
+            border-radius:4px;
+            position:absolute;
+            left:27px;
+            bottom:17px;
+        }
+        .center_bottom_label{
+            width:120px;
+            height:40px;
+            left:5px;
+            top:4px;
+            position:absolute;
+            background-image: url("./images/news_label.png");
+            background-size: 120px 40px;
+            background-repeat: no-repeat no-repeat;
+            background-position: center 0;
+        }
+        .center_bottom_box{
+            padding:0 20px 0 145px;
+            line-height: 48px;
+            font-size:16px;
+            font-family:SourceHanSansSC-Normal,SourceHanSansSC;
+            font-weight:400;
+            color:rgba(34,34,34,1);
+        }
+        .footer_box{
+            height:80px;
+            background:rgba(51,51,51,1);
+        }
+        .footer_left{
+            padding-left:57px;
+            font-size:16px;
+            font-family:SourceHanSansSC-Normal,SourceHanSansSC;
+            font-weight:400;
+            color:rgba(255,255,255,1);
+            line-height:80px;
+            background-image: url("./images/jinghui.png");
+            background-size: 36px 38px;
+            background-repeat: no-repeat no-repeat;
+            background-position: 11px center;
+        }
+        .footer_right{
+            position:absolute;
+            right:0;
+            top:0;
+        }
+        .footer_tongji{
+            width:190px;
+            position:relative;
+            float:left;
+            height:80px;
+        }
+        .footer_tongji_label{
+            position:absolute;
+            left:0;
+            width:70px;
+            text-align: right;
+            height:80px;
+            line-height: 80px;
+            font-size:14px;
+            font-family:SourceHanSansSC-Normal,SourceHanSansSC;
+            font-weight:400;
+            color:rgba(255,255,255,1);
+        }
+        .footer_tongji_num{
+            position:absolute;
+            right:0;
+            width:110px;
+            text-align: left;
+            height:80px;
+            line-height: 80px;
+            font-size:16px;
+            font-family:SourceHanSansSC-Normal,SourceHanSansSC;
+            font-weight:bold;
+            color:rgba(255,255,255,1);
+        }
+        .swiper-button-prev1{
+            width:48px;
+            height:48px;
+            margin-left: -70px;
+            position:absolute;
+            background-image: url("./images/left_btn.png");
+            background-size: 48px 48px;
+            background-repeat: no-repeat no-repeat;
+            background-position: center center;
+            top:46px;
+            left:0;
+            cursor: pointer;
+        }
+
+        .swiper-button-next1{
+            width:48px;
+            height:48px;
+            margin-right: -70px;
+            position:absolute;
+            background-image: url("./images/right_btn.png");
+            background-size: 48px 48px;
+            background-repeat: no-repeat no-repeat;
+            background-position: center center;
+            top:46px;
+            right:0;
+            cursor: pointer;
+        }
+        .swiper-slide.slider_card:hover,.swiper-slide.slider_card.swiper-slide-active{
+            box-shadow:0px 0 16px 0px rgba(0,0,0,0.2);
+            cursor: pointer;
+        }
+        .swiper_item{
+            padding:24px 16px;
+            height:60px;
+            position:relative;
+        }
+        .swiper_item_title{
+            padding-right:50px;
+            padding-bottom:16px;
+            text-align: left;
+            font-size:16px;
+            font-family:SourceHanSansSC-Bold,SourceHanSansSC;
+            font-weight:bold;
+            color:rgba(34,34,34,1);
+            line-height:24px;
+        }
+        .swiper_item_content{
+            padding-right:50px;
+            text-align: left;
+            font-size:14px;
+            font-family:SourceHanSansSC-Normal,SourceHanSansSC;
+            font-weight:400;
+            color:rgba(102,102,102,1);
+            line-height:20px;
+        }
+        .gg_item{
+            overflow: hidden;
+            text-overflow:ellipsis;
+            white-space: nowrap;
+            position:relative;
+            width:440px;
+            cursor: pointer;
+        }
+        .swiper_item_icon{
+            position:absolute;
+            right:24px;
+            top:30px;
+            width:48px;
+            height:48px;
+        }
+        .swiper_item_icon img{
+            width:48px;
+            height:48px;
+            display: block;
+            padding:0;
+            margin:0;
+        }
+    </style>
+</head>
+<body>
+<div id="app" v-cloak
+     @click="startPC">
+    <div class="home_header">
+        <div class="container">
+            <div class="home_header_row">
+                <div class="home_header_row_left">
+                    2020/5/19 下午2:08:56
+                </div>
+                <div class="home_header_row_right">
+                    <span>[ 注册 ]</span> | <span>[ 登录 ]</span>
+                </div>
+            </div>
+            <div class="home_header_logo"></div>
+        </div>
+        <div class="home_header_menu_box" @mouseleave="closeActive">
+            <div class="container">
+                <div class="home_header_menu_box_1">
+                    <div v-for="(item, ind) in menuData" :key="ind" @mouseover="changeActive(ind)"
+                         @click="handleClickFirstMenu(item)"
+                         :class="'home_header_menu_item '+(firstMenuActive===ind||(ind===0&&firstMenuActive===-1)?'active':'')">
+                        {{item.name}}
+                        <i></i>
+                    </div>
+                </div>
+            </div>
+            <div class="home_header_menu_box_container" v-if="firstMenuActive!==-1&&menuData[firstMenuActive].children.length>0">
+                <div class="children_menu_box">
+                    <div class="container">
+                        <el-row type="flex"
+                                v-for="row in menuData[firstMenuActive].children.length%5===0?Math.floor(menuData[firstMenuActive].children.length/5):Math.floor(menuData[firstMenuActive].children.length/5)+1"
+                                :key="row"
+                        >
+                            <el-col v-for="col in 5" :span="6" style="margin-right:20px;">
+                                <div @mouseleave="closeActive1">
+                                    <div @mouseover="changeActive1((row-1)*5+col-1)"
+                                         :class="getCCClass(row-1,col-1)"
+                                         @click="handleClickSecondMenu(menuData[firstMenuActive].children[(row-1)*5+col-1])"
+                                         v-if="menuData[firstMenuActive].children[(row-1)*5+col-1]">
+                                        <span>{{menuData[firstMenuActive].children[(row-1)*5+col-1].name}}<i></i></span>
+                                    </div>
+                                    <div class="children_children_box"
+                                         v-if="menuData[firstMenuActive].children[(row-1)*5+col-1] && menuData[firstMenuActive].children[(row-1)*5+col-1].children.length>0 && (row-1)*5+col-1===secondMenuActive "
+                                         :style="'margin-left:-'+((col-1)*240)+'px;margin-right:-'+(5-col)*240+'px;'">
+                                        <div class="children_children_item"
+                                             @click="handleClickThirdMenu(cc)"
+                                             v-for="(cc, ccIndex) in menuData[firstMenuActive].children[(row-1)*5+col-1].children"
+                                             :key="ccIndex">
+                                            {{cc.name}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </el-col>
+                        </el-row>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="home_center">
+        <div class="container">
+            <div class="center_box">
+                <div class="center_box_container">
+                    <div class="center_title"></div>
+                    <div class="center_box_ewm_btn" @click="showEWM"></div>
+                    <div :class="'center_box_mask '+(ewmShow?'active':'')">
+                        <div class="center_box_close" @click="closeEWM"></div>
+                        <div class="center_box_line"></div>
+                        <div class="center_box_content">
+                        </div>
+                    </div>
+                    <div class="center_menu_box">
+                        <div class="center_menu_item"
+                             v-for="(itt,ind) in centerMenuList"
+                             :key="ind"
+                             @click="handleClickCenterPMenu(itt)"
+                             @mouseover="changeActive2(ind)"
+                             @mouseleave="closeActive2()">
+                            <div class="center_menu_icon">
+                                <img :src="'./images/centerMenu/'+itt.name+'.png'" alt="">
+                            </div>
+                            <div class="center_menu_title">
+                                {{itt.name}}
+                            </div>
+                            <div class="center_children_box" v-if="ind===centerActive&&itt.children.length>0" :style="(ind<4?'left:116px;right:auto;':'left:auto;right:116px;')+''">
+                                <div class="center_children_container">
+                                    <div class="center_children_left" v-if="ind<4"></div>
+                                    <div class="center_children_center">
+                                        <div class="center_children_group" v-for="row in itt.children.length%2===0?Math.floor(itt.children.length/2):Math.floor(itt.children.length/2)+1" :key="row">
+                                            <div class="center_children_item"
+                                                 v-for="col in 2"
+                                                 :key="col"
+                                                 @click="handleClickCenterMenu(itt.children[(row-1)*2+col-1])"
+                                                 v-if="itt.children[(row-1)*2+col-1]">
+                                                {{itt.children[(row-1)*2+col-1].name}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="center_children_right" v-if="ind>=4"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="center_bottom">
+                        <div class="center_bottom_label"></div>
+                        <div class="center_bottom_box" @mouseenter="stopSwiper('swiper1')" @mouseleave="startSwiper('swiper1')">
+                            <swiper class="swiper1" ref="swiper1" :options="swiperOption1">
+                                <swiper-slide class="slider_gg" v-for="(item,ind) in ggs" :key="ind">
+                                    <div class="gg_item" @click.stop="handleClickCenterLink(item)">{{item.content}}<span>{{item.time}}</span></div>
+                                </swiper-slide>
+                            </swiper>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="ad"
+         v-if="pcSetting.show"
+         @click.stop="stopPC"
+         :style="('left:'+pcSetting.left+';')+('top:'+pcSetting.top+';')">
+        <div class="pc_title">
+            涉疫情信息发布
+        </div>
+        <div class="pc_close" @click.stop="closePC"></div>
+        <div class="pc_info">
+            2019年，全省公安机关在省委、省政府和公安部坚强领导下，以习近平新时代中国特色社会主义思想为指导，认真学习贯彻全国全省公安工作会议和全国公安机关执法2019年，全省公安机关在省委、省政府和公安部坚强领导下，以习近平新时代中国特色社会主义思想为指导，认真学习贯彻全国全省公安工作会议和全国公安机关执法规
+        </div>
+        <img src='images/float_bg.png' style="width:300px;height:184px;" border="0">
+    </div>
+
+
+    <div style="position:relative" @mouseenter="stopSwiper('swiper')" @mouseleave="startSwiper('swiper')" >
+        <div class="container">
+            <div class="swiper-button-prev1"></div>
+            <div class="swiper-button-next1"></div>
+        </div>
+
+        <swiper class="swiper" ref="swiper" :options="swiperOption">
+            <swiper-slide class="slider_card" v-for="(item,ind) in sliders" :key="ind">
+                <div class="swiper_item" @click="handleClickBottomMenu(item)">
+                    <div class="swiper_item_title">{{item.name}}</div>
+                    <div class="swiper_item_content">{{item.content}}</div>
+                    <div class="swiper_item_icon">
+                        <img :src="'./images/slider/'+item.name+'.png'" alt="">
+                    </div>
+                </div>
+            </swiper-slide>
+        </swiper>
+    </div>
+
+    <div class="footer_box">
+        <div class="container">
+            <div class="footer_left">
+                山东省菏泽市公安局版权所有
+            </div>
+            <div class="footer_right">
+                <div class="footer_tongji">
+                    <div class="footer_tongji_label">总浏览量</div>
+                    <div class="footer_tongji_num">8531</div>
+                </div>
+                <div class="footer_tongji">
+                    <div class="footer_tongji_label">本月浏览量</div>
+                    <div class="footer_tongji_num">4939</div>
+                </div>
+                <div class="footer_tongji">
+                    <div class="footer_tongji_label">今日浏览量</div>
+                    <div class="footer_tongji_num">71</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+
+<script>
+    var Vue = window.Vue;
+    Vue.use(window.VueAwesomeSwiper)
+    new Vue({
+        el: '#app',
+        data: function () {
+            return {
+                ggs: [{
+                    content: '关于出入境证件申请的公告1',
+                    time: '2020-02-06'
+                },{
+                    content: '关于出入境证件申请的公告2关于出入境证件申请的公告2关于出入境证件申请的公告2关于出入境证件申请的公告2',
+                    time: '2020-02-06'
+                },{
+                    content: '关于出入境证件申请的公告3',
+                    time: '2020-02-06'
+                },{
+                    content: '关于出入境证件申请的公告4',
+                    time: '2020-02-06'
+                },{
+                    content: '关于出入境证件申请的公告5',
+                    time: '2020-02-06'
+                },{
+                    content: '关于出入境证件申请的公告6',
+                    time: '2020-02-06'
+                },{
+                    content: '关于出入境证件申请的公告7',
+                    time: '2020-02-06'
+                },{
+                    content: '关于出入境证件申请的公告8',
+                    time: '2020-02-06'
+                }],
+                sliders: [
+                    {
+                        name: '我的身份证',
+                        content: '个人身份证信息'
+                    }, {
+                        name: '我的驾驶证',
+                        content: '个人驾驶证信息'
+                    }, {
+                        name: '我的行驶证',
+                        content: '车辆行驶证信息'
+                    }, {
+                        name: '我的机动车',
+                        content: '个人车辆信息'
+                    }, {
+                        name: '我的办件',
+                        content: '个人办件信息'
+                    }, {
+                        name: '我的诉求',
+                        content: '个人诉求列表'
+                    }, {
+                        name: '我的评价',
+                        content: '个人评价列表'
+                    }, {
+                        name: '我的消息',
+                        content: '个人消息列表'
+                    }, {
+                        name: '我的邮寄',
+                        content: '个人邮寄信息'
+                    }, {
+                        name: '我的支付',
+                        content: '个人支付信息'
+                    }, {
+                        name: '我的举报',
+                        content: '个人举报列表'
+                    }, {
+                        name: '我的证明',
+                        content: '个人证明列表'
+                    }
+                ],
+                centerActive: -1,
+                centerMenuList: [
+                    {
+                        id: 0,
+                        name: '证明开具',
+                        children: [{
+                            name: '临时身份证明'
+                        }, {
+                            name: '无犯罪纪录证明'
+                        }, {
+                            name: '与户主关系证明'
+                        }, {
+                            name: '户籍变更证明'
+                        }]
+                    },{
+                        id: 1,
+                        name: '便民服务',
+                        children: [{
+                            name: '快递查询'
+                        }, {
+                            name: '失物招领'
+                        }, {
+                            name: '走失寻人'
+                        }]
+                    },{
+                        id: 2,
+                        name: '警民互动',
+                        children: [{
+                            name: '局长信箱'
+                        }, {
+                            name: '举报投诉'
+                        }, {
+                            name: '在线访谈'
+                        }, {
+                            name: '有奖举报'
+                        }]
+                    },{
+                        id: 3,
+                        name: '交通出行',
+                        children: []
+                    },{
+                        id: 4,
+                        name: '警务公开',
+                        children: [{
+                            name: '警方提醒'
+                        }, {
+                            name: '协查通报'
+                        }]
+                    },{
+                        id: 5,
+                        name: '普法在线',
+                        children: [{
+                            name: '普法在线'
+                        }, {
+                            name: '访谈记录'
+                        }]
+                    },{
+                        id: 6,
+                        name: '便民服务信息',
+                        children: [{
+                            name: '营业性爆破作业单位名录'
+                        }, {
+                            name: '出入境机构名录'
+                        }, {
+                            name: '开锁业信息'
+                        }, {
+                            name: '公章刻制业名录'
+                        }]
+                    },{
+                        id: 7,
+                        name: '证明开具',
+                        children: []
+                    }
+                ],
+                ewmShow: false,
+                menuData: [
+                    {
+                        name: '首页',
+                        id: '0',
+                        children: []
+                    }, {
+                        name: '热门应用',
+                        id: '1',
+                        children: [
+                            {
+                                name: '便捷挪车',
+                                id: '11',
+                                children: []
+                            },
+                            {
+                                name: '交通违法处理',
+                                id: '12',
+                                children: []
+                            },
+                            {
+                                name: '罚单缴款',
+                                id: '13',
+                                children: []
+                            },
+                            {
+                                name: '微信报警',
+                                id: '14',
+                                children: []
+                            },
+                            {
+                                name: '城市路况',
+                                id: '15',
+                                children: []
+                            },
+                            {
+                                name: '快递查询',
+                                id: '16',
+                                children: []
+                            },
+                            {
+                                name: '无犯罪证明',
+                                id: '17',
+                                children: []
+                            },
+                            {
+                                name: '临时身份证明',
+                                id: '18',
+                                children: []
+                            }
+                        ]
+                    }, {
+                        name: '警民互动',
+                        id: '2',
+                        children: [
+                            {
+                                name: '局长信箱',
+                                id: '21',
+                                children: []
+                            },
+                            {
+                                name: '举报投诉',
+                                id: '22',
+                                children: []
+                            },
+                            {
+                                name: '在线咨询',
+                                id: '23',
+                                children: []
+                            },
+                            {
+                                name: '访谈记录',
+                                id: '24',
+                                children: []
+                            }
+                        ]
+                    }, {
+                        name: '全部',
+                        id: '3',
+                        children: [
+                            {
+                                name: '户籍业务',
+                                id: '301',
+                                children: [{
+                                    id: '30101',
+                                    name: '登记注销'
+                                }, {
+                                    id: '30102',
+                                    name: '户口迁移'
+                                }, {
+                                    id: '30103',
+                                    name: '变更更正'
+                                }, {
+                                    id: '30104',
+                                    name: '居住证业务'
+                                }, {
+                                    id: '30105',
+                                    name: '身份证办理进度'
+                                }, {
+                                    id: '30106',
+                                    name: '户政联系方式'
+                                }]
+                            },
+                            {
+                                name: '监管业务',
+                                id: '302',
+                                children: [{
+                                    id: '30201',
+                                    name: '家属预约会见'
+                                }, {
+                                    id: '30202',
+                                    name: '律师预约会见'
+                                }]
+                            },
+                            {
+                                name: '出入境业务',
+                                id: '303',
+                                children: [{
+                                    id: '30301',
+                                    name: '预约办理'
+                                }, {
+                                    id: '30302',
+                                    name: '双向速递'
+                                }, {
+                                    id: '30303',
+                                    name: '办理进度查询'
+                                }, {
+                                    id: '30304',
+                                    name: '出入境机构名录'
+                                }]
+                            },
+                            {
+                                name: '交通出行',
+                                id: '304',
+                                children: [{
+                                    id: '30401',
+                                    name: '高速路况'
+                                }, {
+                                    id: '30402',
+                                    name: '城市路况'
+                                }, {
+                                    id: '30403',
+                                    name: '路况直播'
+                                }]
+                            },
+                            {
+                                name: '有奖举报',
+                                id: '305',
+                                children: []
+                            },
+                            {
+                                name: '便民服务',
+                                id: '306',
+                                children: [{
+                                    id: '30601',
+                                    name: '1'
+                                }]
+                            },
+                            {
+                                name: '网点查询',
+                                id: '307',
+                                children: []
+                            },
+                            {
+                                name: '证明开具',
+                                id: '308',
+                                children: [{
+                                    id: '30801',
+                                    name: '1'
+                                }]
+                            },
+                            {
+                                name: '警务公开',
+                                id: '309',
+                                children: [{
+                                    id: '30901',
+                                    name: '1'
+                                }]
+                            },
+                            {
+                                name: '寻人寻物',
+                                id: '310',
+                                children: [{
+                                    id: '31001',
+                                    name: '1'
+                                }]
+                            },
+                            {
+                                name: '普法在线',
+                                id: '311',
+                                children: []
+                            },
+                            {
+                                name: '便民服务信息',
+                                id: '312',
+                                children: [{
+                                    id: '31201',
+                                    name: '1'
+                                }]
+                            }
+                        ]
+                    }
+                ],
+                firstMenuActive: -1,
+                secondMenuActive: -1,
+                pcSetting: {
+                    show: true,
+                    x: document.body.clientWidth - 400,
+                    y: 200,
+                    xin: true,
+                    yin: true,
+                    left: 0,
+                    top: 0,
+                    step: 1,
+                    delay: 80
+                },
+                swiperOption: {
+                    grabCursor:true,
+                    loop: true,
+                    autoplay: {
+                        delay: 1500,
+                        stopOnLastSlide: false,
+                        disableOnInteraction: false
+                    },
+                    slidesPerView: 5,
+                    spaceBetween: 20,
+                    freeMode: true,
+                    pagination: {
+                        el: '.swiper-pagination',
+                        clickable: true
+                    },
+                    navigation: {
+                        nextEl: '.swiper-button-next1',
+                        prevEl: '.swiper-button-prev1',
+                    },
+                },
+                swiperOption1: {
+                    grabCursor:true,
+                    loop: true,
+                    autoplay: {
+                        delay: 3000,
+                        stopOnLastSlide: false,
+                        disableOnInteraction: false
+                    },
+                    slidesPerView: 2,
+                    spaceBetween: 20,
+                    freeMode: true
+                }
+            }
+        },
+        created:function() {
+        },
+        mounted:function() {
+            this.startPC()
+            console.log(document.body.clientWidth)
+        },
+        methods: {
+            handleClickFirstMenu:function(item) {
+                console.log('handleClickFirstMenu', item)
+            },
+            handleClickSecondMenu:function(item) {
+                console.log('handleClickSecondMenu', item)
+            },
+            handleClickThirdMenu:function(item) {
+                console.log('handleClickThirdMenu', item)
+            },
+            handleClickCenterPMenu:function(item) {
+                console.log('handleClickCenterPMenu', item)
+            },
+            handleClickCenterMenu:function(item) {
+                console.log('handleClickCenterMenu', item)
+            },
+            handleClickCenterLink:function(item) {
+                console.log('handleClickCenterLink', item)
+            },
+            handleClickBottomMenu:function(item) {
+                console.log('handleClickBottomMenu', item)
+            },
+            stopSwiper:function(key) {
+                this.$refs[key].$swiper.autoplay.stop();
+            },
+            startSwiper:function(key) {
+                this.$refs[key].$swiper.autoplay.start();
+            },
+            showEWM:function() {
+                console.log('ewmShow')
+                this.ewmShow = true
+            },
+            closeEWM:function() {
+                console.log('ewmShow1')
+                this.ewmShow = false
+            },
+            getCCClass:function(row, col) {
+                var item = this.menuData[this.firstMenuActive].children[row * 5 + col]
+                var cl = 'children_menu_item '
+                if (item.children.length > 0) {
+                    cl += 'hasChildren '
+                }
+                if (this.secondMenuActive === row * 5 + col) {
+                    cl += 'active'
+                }
+                return cl
+            },
+            closeActive2:function() {
+                this.centerActive = -1
+            },
+            changeActive2:function(active) {
+                this.centerActive = active
+            },
+            closeActive1:function() {
+                this.secondMenuActive = -1
+            },
+            changeActive1:function(active) {
+                this.secondMenuActive = active
+            },
+            closeActive:function() {
+                this.firstMenuActive = -1
+            },
+            changeActive:function(active) {
+                this.firstMenuActive = active
+            },
+            floatAD:function(obj) {
+                // console.log(obj)
+                var L = 0
+                var T = 0
+                var R = document.body.clientWidth - obj.offsetWidth
+                var B = document.body.clientHeight - obj.offsetHeight
+                this.pcSetting.left = this.pcSetting.x + document.body.scrollLeft + "px"
+                this.pcSetting.top = this.pcSetting.y + document.body.scrollTop + "px"
+                this.pcSetting.x = this.pcSetting.x + this.pcSetting.step * (this.pcSetting.xin ? 1 : -1)
+                if (this.pcSetting.x < L) {
+                    this.pcSetting.xin = true;
+                    this.pcSetting.x = L
+                }
+                if (this.pcSetting.x > R) {
+                    this.pcSetting.xin = false;
+                    this.pcSetting.x = R
+                }
+                this.pcSetting.y = this.pcSetting.y + this.pcSetting.step * (this.pcSetting.yin ? 1 : -1)
+                if (this.pcSetting.y < T) {
+                    this.pcSetting.yin = true;
+                    this.pcSetting.y = T
+                }
+                if (this.pcSetting.y > B) {
+                    this.pcSetting.yin = false;
+                    this.pcSetting.y = B
+                }
+                this.$forceUpdate()
+            },
+            closePC:function() {
+                this.stopPC()
+                this.pcSetting.show = false
+            },
+            stopPC:function() {
+                if (this.itl) {
+                    clearInterval(this.itl)
+                }
+            },
+            startPC:function() {
+                if (this.pcSetting.show) {
+                    var obj = document.getElementById("ad")
+                    this.stopPC()
+                    var that = this
+                    this.itl = setInterval(function() {
+                        that.floatAD(obj)
+                    }, this.pcSetting.delay)
+                }
+            },
+        }
+    })
+</script>
+</html>

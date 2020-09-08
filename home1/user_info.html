@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <!--移动端配置-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="Cache-Control" content="max-age=0">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <!-- 是否启用 WebApp 全屏模式，删除苹果默认的工具栏和菜单栏 -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <!-- 设置苹果工具栏颜色 -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <!-- 忽略页面中的数字识别为电话，忽略email识别 -->
+    <meta name="format-detection" content="telphone=no, email=no">
+
+    <!-- 引入组件 -->
+    <script src="js/vue.js"></script>
+    <script src="js/vant.js"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="js/vant.css">
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+        #app {
+        }
+        .top_img{
+            height:130px;
+            background:#fff;
+        }
+        .top_img img{
+            height:100%;
+            display: block;
+            margin:0 auto;
+            padding:0;
+        }
+        .no_data_img{
+            position:relative;
+            margin:40px auto 20px auto;
+            width:120px;
+            height:120px;
+        }
+        .no_data_type{
+            font-size:14px;
+            font-family:PingFangSC-Regular,PingFang SC;
+            font-weight:400;
+            color:rgba(17,17,17,1);
+            line-height:20px;
+            text-align: center;
+            padding: 0 30px 12px 30px;
+        }
+        .no_data_content{
+            font-size:12px;
+            font-family:PingFangSC-Regular,PingFang SC;
+            font-weight:400;
+            color:rgba(164,171,179,1);
+            line-height:18px;
+            padding: 0 30px 40px 30px;
+            text-align: center;
+        }
+        .no_data_btn1{
+            background:rgba(80,160,248,1);
+            border-radius:4px;
+            margin:0 16px 20px 16px;
+            text-align: center;
+            height:44px;
+            line-height: 44px;
+            font-size:16px;
+            font-family:PingFangSC-Regular,PingFang SC;
+            font-weight:400;
+            color:rgba(255,255,255,1);
+        }
+
+        .no_data_btn2{
+            background:rgba(220,236,254,1);
+            border-radius:4px;
+            margin:0 16px 20px 16px;
+            text-align: center;
+            height:44px;
+            line-height: 44px;
+            font-size:16px;
+            font-family:PingFangSC-Regular,PingFang SC;
+            font-weight:400;
+            color:rgba(80,160,248,1);
+        }
+        .user_info_box{
+            padding:12px 16px 0 16px;
+            position:relative;
+        }
+        .user_basic_info{
+            position:relative;
+        }
+        .user_basic_info_box{
+            margin-right:115px;
+        }
+        .user_basic_info_img{
+            width:84px;
+            height:108px;
+            position:absolute;
+            right:0;
+            top:50%;
+            margin-top:-54px;
+            background:#f2f2f2;
+        }
+        .user_info_item{
+            position:relative;
+            line-height:24px;
+            min-height: 24px;
+            padding:10px 0;
+            border-bottom:1px solid rgba(235,237,240,1);
+        }
+        .user_info_item_left{
+            position:absolute;
+            left:0;
+            top:10px;
+            line-height: 24px;
+            font-size:14px;
+            font-family:PingFangSC-Regular,PingFang SC;
+            font-weight:400;
+            color:rgba(42,48,60,1);
+        }
+        .user_info_item_right{
+            position:relative;
+            margin-left:100px;
+            text-align: right;
+            line-height: 24px;
+            font-size:14px;
+            font-family:PingFangSC-Regular,PingFang SC;
+            font-weight:400;
+            color:rgba(107,115,122,1);
+        }
+        .user_info_item.opened .user_info_item_right{
+            white-space: normal;
+            overflow: visible;
+            text-overflow: inherit;
+        }
+        .user_info_item.opened .user_info_item_right i{
+            width:16px;
+            height:16px;
+            background-image:url("images/icon_isOpened.png");
+            background-size:100% 100%;
+            background-repeat: no-repeat;
+            background-position:0 0;
+            position:absolute;
+            right:0;
+            bottom:4px;
+        }
+        .user_info_item.closed .user_info_item_right i{
+            width:16px;
+            height:16px;
+            background-image:url("images/icon_isClosed.png");
+            background-size:100% 100%;
+            background-repeat: no-repeat;
+            background-position:0 0;
+            position:absolute;
+            right:0;
+            bottom:4px;
+        }
+
+        .user_info_item.closed .user_info_item_right{
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .refresh_info{
+            font-size:12px;
+            font-family:PingFangSC-Regular,PingFang SC;
+            font-weight:400;
+            color:rgba(42,48,60,1);
+            line-height:16px;
+            padding:40px 30px;
+            text-align: center;
+        }
+        .refresh_info span{
+            color:#50A0F8;
+        }
+        .bottom_btn{
+            background:rgba(80,160,248,1);
+            border-radius:4px;
+            height:44px;
+            line-height: 44px;
+            margin:0 16px 40px 16px;
+            font-family:PingFangSC-Regular,PingFang SC;
+            font-weight:400;
+            color:rgba(255,255,255,1);
+            text-align: center;
+
+        }
+        .user_basic_info_img img{
+            width:100%;
+            height:100%;
+            display: block;
+            position:absolute;
+            left:0;
+            top:0;
+            margin:0;
+            padding:0;
+        }
+    </style>
+</head>
+<body>
+<div id="app" v-cloak>
+    <div class="info_box" v-if="userData.id">
+        <div class="top_img" :style="'zoom:'+zoom">
+            <img :src="image_url" />
+        </div>
+        <div class="user_info_box">
+            <div class="user_basic_info">
+                <div class="user_basic_info_box">
+                    <div class="user_info_item">
+                        <div class="user_info_item_left">姓名：</div>
+                        <div class="user_info_item_right">{{userData.xm}}</div>
+                    </div>
+                    <div class="user_info_item">
+                        <div class="user_info_item_left">曾用名：</div>
+                        <div class="user_info_item_right">{{userData.cym}}</div>
+                    </div>
+                    <div class="user_info_item">
+                        <div class="user_info_item_left">性别：</div>
+                        <div class="user_info_item_right">{{userData.xb}}</div>
+                    </div>
+                </div>
+                <div class="user_basic_info_img">
+                    <img :src="userData.photo" alt="">
+                </div>
+            </div>
+            <div class="user_other_info">
+                <div class="user_info_item">
+                    <div class="user_info_item_left">民族：</div>
+                    <div class="user_info_item_right">{{userData.mz}}</div>
+                </div>
+                <div class="user_info_item">
+                    <div class="user_info_item_left">公民身份号码：</div>
+                    <div class="user_info_item_right">{{userData.sfz}}</div>
+                </div>
+                <div class="user_info_item">
+                    <div class="user_info_item_left">出生日期：</div>
+                    <div class="user_info_item_right">{{userData.csrq}}</div>
+                </div>
+                <div @click="changeStatus('czhkszdxz')" :class="'user_info_item '+(czhkszdxz?'opened':'closed')">
+                    <div class="user_info_item_left">常住户口所在地祥址：</div>
+                    <div class="user_info_item_right" style="margin-left:150px;padding-right:24px;">{{userData.czhkszdxz}}<i></i></div>
+                </div>
+                <div @click="changeStatus('xjzdxz')" :class="'user_info_item '+(xjzdxz?'opened':'closed')">
+                    <div class="user_info_item_left">现居住地祥址：</div>
+                    <div class="user_info_item_right" style="margin-left:110px;padding-right:24px;">{{userData.xjzdxz}}<i></i></div>
+                </div>
+                <div class="user_info_item">
+                    <div class="user_info_item_left">居住地派出所：</div>
+                    <div class="user_info_item_right">{{userData.jzdpcs}}</div>
+                </div>
+                <div class="user_info_item">
+                    <div class="user_info_item_left">登记日期：</div>
+                    <div class="user_info_item_right">{{userData.djrq}}</div>
+                </div>
+            </div>
+            <div class="refresh_info" @click="refreshData">
+                以上数据如与实际信息不符请点击<span>此处刷新</span>
+            </div>
+            <div class="bottom_btn">
+                返回首页
+            </div>
+        </div>
+    </div>
+    <div class="no_data" v-if="!userData.id">
+        <div class="no_data_img">
+            <img src="images/no_data_img.png" height="120" width="120"/>
+        </div>
+        <div class="no_data_type">未查询到相关记录</div>
+        <div class="no_data_content">您还未申报居住登记</div>
+        <div class="no_data_btn1" @click="applyInfo">点击申报居住信息</div>
+        <div class="no_data_btn2" @click="back2Home">返回首页</div>
+    </div>
+</div>
+</body>
+
+
+<script>
+    var Vue = window.Vue;
+    var vant = window.vant;
+
+    Vue.use(vant.Lazyload);
+
+    new Vue({
+        el: '#app',
+        data: function() {
+            return {
+                userData: {
+                    id: 1,
+                    xm: '卢正义',
+                    cym: '卢正一',
+                    xb: '男',
+                    mz: '汉',
+                    sfz: '370112199402190019',
+                    csrq: '1994-02-19',
+                    czhkszdxz: '山东省济南市历城区王舍济南市历城区王舍人镇华山片区葫芦屯村一二三四五六',
+                    xjzdxz: '山东省济南市历城区王舍济南市历城区王舍人镇华山片区葫芦屯村一二三四五六',
+                    jzdpcs: '华山片区',
+                    djrq: '2020-02-20',
+                    photo: '',
+                },
+                czhkszdxz: true,
+                xjzdxz: false,
+                image_url: 'images/jzdjpzxx_img.png',
+                zoom: 1
+            }
+        },
+        created() {
+            const windowWidth = window.screen.width
+            this.zoom = windowWidth / 375
+        },
+        mounted() {
+        },
+        methods: {
+            refreshData() {
+                alert('数据刷新')
+            },
+            changeStatus(key){
+                this[key] = !this[key]
+            },
+            applyInfo() {
+                alert('申报居住信息')
+            },
+            back2Home() {
+                alert('返回首页')
+            },
+        }
+    })
+</script>
+</html>

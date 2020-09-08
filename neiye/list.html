@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <!--移动端配置-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="Cache-Control" content="max-age=0">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <!-- 是否启用 WebApp 全屏模式，删除苹果默认的工具栏和菜单栏 -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <!-- 设置苹果工具栏颜色 -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <!-- 忽略页面中的数字识别为电话，忽略email识别 -->
+    <meta name="format-detection" content="telphone=no, email=no">
+</head>
+<body>
+<div id="app">
+    <div class="list_box">
+        <van-pull-refresh v-model="isLoading" @refresh="onRefresh" style="min-height: calc(100vh - 110px);">
+            <div class="no_data" v-if="list.length===0">
+                <div class="no_data_img"></div>
+                <div class="no_data_msg">还没有车辆信息哦</div>
+            </div>
+            <van-list
+                    v-if="list.length>0"
+                    v-model="loading"
+                    :finished="finished"
+                    finished-text="没有更多了"
+                    @load="onLoad"
+            >
+                <van-swipe-cell
+                        v-for="(item,index) in list"
+                        :key="index">
+                    <div class="car_item">
+                        <div class="car_item_icon"></div>
+                        <div class="car_item_enter"></div>
+                        <div class="car_item_body">
+                            <div class="car_item_title">鲁 A90009</div>
+                            <div class="car_item_type">小型汽车{{item}}</div>
+                        </div>
+                    </div>
+                    <template slot="right">
+                        <div class="right_btn_box" @click="deleteRow(index)">
+                            <div class="right_btn">删除</div>
+                        </div>
+                    </template>
+                </van-swipe-cell>
+            </van-list>
+            <div class="refresh_text">
+                以上数据如与实际信息不符请点击<span>此处刷新</span>
+            </div>
+        </van-pull-refresh>
+    </div>
+    <div class="bottom_box">
+        <div class="bottom_btn">备案更多机动车</div>
+    </div>
+</div>
+</body>
+<!-- 引入样式 -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@2.1/lib/index.css">
+<style>
+    @font-face{
+        font-family: 'DIN-D';
+        src: url('font/DIN-Black.eot');
+        src: url('font/DIN-Black.woff') format('woff'),
+        url('font/DIN-Black.ttf') format('truetype'),
+        url('font/DIN-Black.svg') format('svg');
+    }
+    #app {
+        background:rgba(247,247,247,1);
+    }
+    .no_data{
+        padding-top:40px;
+    }
+    .no_data_img{
+        margin:0 auto;
+        width:160px;
+        height:160px;
+        background-image: url("images/icon_no_data.png");
+        background-position: 0 0;
+        background-repeat: no-repeat;
+        background-size: 160px 160px;
+    }
+    .no_data_msg{
+        padding-top:12px;
+        height:16px;
+        font-size:12px;
+        font-family:DIN-D;
+        font-weight:400;
+        color:rgba(177,185,193,1);
+        line-height:16px;
+        text-align: center;
+    }
+    .right_btn_box{
+        position:relative;
+        height:100%;
+        width:100px;
+        background:rgba(245,33,45,1);
+    }
+    .right_btn{
+        position:absolute;
+        left:0;
+        right:0;
+        text-align: center;
+        top:50%;
+        height:20px;
+        line-height: 20px;
+        color:#fff;
+        margin-top:-10px;
+    }
+    .refresh_text{
+        height:20px;
+        font-size:14px;
+        font-family:DIN-D;
+        font-weight:400;
+        color:rgba(42,48,60,1);
+        line-height:20px;
+        padding:32px 16px;
+        text-align: center;
+    }
+    .refresh_text span{
+        color:rgba(80,160,248,1);
+    }
+    .list_box{
+        position:fixed;
+        bottom:110px;
+        left:0;
+        right:0;
+        top:0;
+        overflow: auto;
+        background:rgba(247,247,247,1);
+    }
+    .bottom_box{
+        position:fixed;
+        bottom:0;
+        left:0;
+        right:0;
+        height:110px;
+        background:rgba(247,247,247,1);
+    }
+    .bottom_btn{
+        margin: 10px 16px 0 16px;
+        color:#fff;
+        height:44px;
+        background:rgba(80,160,248,1);
+        border-radius:4px;
+        font-size:16px;
+        font-family:DIN-D;
+        font-weight:400;
+        color:rgba(255,255,255,1);
+        line-height:44px;
+        text-align: center;
+    }
+    .car_item{
+        height:48px;
+        padding:16px;
+        position:relative;
+        background:#fff;
+        border-bottom:1px solid rgba(247,247,247,1)
+    }
+    .car_item_icon{
+        position:absolute;
+        left:16px;
+        top:50%;
+        margin-top:-24px;
+        width:48px;
+        height:48px;
+        background-image: url("images/icon_car.png");
+        background-position: 0 0;
+        background-repeat: no-repeat;
+        background-size: 48px 48px;
+    }
+    .car_item_enter{
+        position:absolute;
+        right:16px;
+        top:50%;
+        margin-top:-8px;
+        width:16px;
+        height:16px;
+        background-image: url("images/icon_enter.png");
+        background-position: 0 0;
+        background-repeat: no-repeat;
+        background-size: 16px 16px;
+    }
+    .car_item_body{
+        position:relative;
+        padding:0 28px 0 60px;
+    }
+    .car_item_title{
+        height:23px;
+        font-size:16px;
+        font-family:DIN-D;
+        font-weight:600;
+        color:rgba(42,48,60,1);
+        line-height:23px;
+        padding-bottom:8px;
+    }
+    .car_item_type{
+        height:16px;
+        font-size:12px;
+        font-family:DIN-D;
+        font-weight:400;
+        color:rgba(107,115,122,1);
+        line-height:16px;
+    }
+
+</style>
+
+<!-- 引入组件 -->
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vant@2.1/lib/vant.min.js"></script>
+
+<script>
+    var Vue = window.Vue;
+    var vant = window.vant;
+
+    Vue.use(vant.Lazyload);
+
+    new Vue({
+        el: '#app',
+        data: function() {
+            return {
+                isLoading: false,
+                list: [],
+                loading: false,
+                finished: false
+            }
+        },
+        mounted() {
+            this.onRefresh()
+        },
+        methods: {
+            deleteRow(index){
+                alert(index);
+                this.list.splice(index, 1)
+            },
+            onRefresh() {
+                this.list = []
+                //模拟后台请求第一页数据
+                for (let i = 0; i < 10; i++) {
+                    this.list.push(this.list.length + 1);
+                }
+                this.isLoading = false
+                //根据返回数据的total值是否是最后一页来设置finish是否结束
+                this.finished = false
+            },
+            onLoad() {
+                // 异步更新数据
+                setTimeout(() => {
+                    //模拟后台请求分页数据
+                    for (let i = 0; i < 10; i++) {
+                        this.list.push(this.list.length + 1);
+                    }
+                    // 加载状态结束
+                    this.loading = false;
+                    //根据返回数据的total值是否是最后一页来设置finish是否结束
+                    // 数据全部加载完成，当前判断的事>=40条完成加载
+                    if (this.list.length >= 40) {
+                        this.finished = true;
+                    }
+                }, 500);
+            }
+        }
+    })
+</script>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <!--移动端配置-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="Cache-Control" content="max-age=0">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <!-- 是否启用 WebApp 全屏模式，删除苹果默认的工具栏和菜单栏 -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <!-- 设置苹果工具栏颜色 -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <!-- 忽略页面中的数字识别为电话，忽略email识别 -->
+    <meta name="format-detection" content="telphone=no, email=no">
+
+    <!-- 引入组件 -->
+    <script src="js/vue.js"></script>
+    <script src="js/vant.js"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="js/vant.css">
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+        #app {
+        }
+        .no_data_img{
+            position:relative;
+            margin:40px auto 20px auto;
+            width:120px;
+            height:120px;
+        }
+        .no_data_type{
+            font-size:14px;
+            font-family:PingFangSC-Regular,PingFang SC;
+            font-weight:400;
+            color:rgba(17,17,17,1);
+            line-height:20px;
+            text-align: center;
+            padding: 0 30px 12px 30px;
+        }
+        .no_data_content{
+            font-size:12px;
+            font-family:PingFangSC-Regular,PingFang SC;
+            font-weight:400;
+            color:rgba(164,171,179,1);
+            line-height:18px;
+            padding: 0 30px 40px 30px;
+            text-align: center;
+        }
+        .no_data_btn1{
+            background:rgba(80,160,248,1);
+            border-radius:4px;
+            margin:0 16px 20px 16px;
+            text-align: center;
+            height:44px;
+            line-height: 44px;
+            font-size:16px;
+            font-family:PingFangSC-Regular,PingFang SC;
+            font-weight:400;
+            color:rgba(255,255,255,1);
+        }
+
+        .no_data_btn2{
+            background:rgba(220,236,254,1);
+            border-radius:4px;
+            margin:0 16px 20px 16px;
+            text-align: center;
+            height:44px;
+            line-height: 44px;
+            font-size:16px;
+            font-family:PingFangSC-Regular,PingFang SC;
+            font-weight:400;
+            color:rgba(80,160,248,1);
+        }
+    </style>
+</head>
+<body>
+<div id="app" v-cloak>
+    <div class="info_box" v-if="userData.id">
+
+    </div>
+    <div class="no_data" v-if="!userData.id">
+        <div class="no_data_img">
+            <img src="images/no_data_img.png" height="120" width="120"/>
+        </div>
+        <div class="no_data_type">未查询到居住证信息</div>
+        <div class="no_data_content">您还未申领居住证</div>
+        <div class="no_data_btn1" @click="searchAgain">继续查询登记信息</div>
+        <div class="no_data_btn2" @click="back2Home">返回首页</div>
+    </div>
+</div>
+</body>
+
+
+<script>
+    var Vue = window.Vue;
+    var vant = window.vant;
+
+    Vue.use(vant.Lazyload);
+
+    new Vue({
+        el: '#app',
+        data: function() {
+            return {
+                userData: {},
+                image_url: 'images/jzdjpzxx_img.png',
+                zoom: 1
+            }
+        },
+        created() {
+            const windowWidth = window.screen.width
+            this.zoom = windowWidth / 375
+        },
+        mounted() {
+        },
+        methods: {
+            searchAgain() {
+                alert('继续查询登记信息')
+            },
+            back2Home() {
+                alert('返回首页')
+            },
+        }
+    })
+</script>
+</html>

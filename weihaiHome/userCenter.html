@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <!--移动端配置-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="Cache-Control" content="max-age=0">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <!-- 是否启用 WebApp 全屏模式，删除苹果默认的工具栏和菜单栏 -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <!-- 设置苹果工具栏颜色 -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <!-- 忽略页面中的数字识别为电话，忽略email识别 -->
+    <meta name="format-detection" content="telphone=no, email=no">
+
+    <!-- 引入组件 -->
+    <script src="js/vue.js"></script>
+    <script src="js/vant.js"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="js/vant.css">
+    <style>
+        html,body{
+            background:rgba(247,247,247,1);
+        }
+        [v-cloak] {
+            display: none;
+        }
+        #app {
+            padding-bottom:50px;
+            background:rgba(247,247,247,1);
+        }
+        .banner_item,.banner_list{
+            height:160px;
+            background:#fff;
+        }
+        .banner_item img{
+            height:100%;
+            display: block;
+            margin:0 auto;
+            padding:0;
+        }
+        .menu_parent{
+            background:#fff;
+        }
+        .children_list{
+            background:#EAECEE;
+        }
+        .menu_item{
+            min-height:73px;
+            padding:15px 0;
+            overflow: hidden;
+        }
+
+        .menu_child{
+            background:#EAECEE;
+            padding:15px 0 5px 0;
+        }
+        .menu_icon{
+            width:54px;
+            height:54px;
+            margin:0 auto;
+            display: block;
+        }
+        .menu_title{
+            padding-top:2px;
+            min-height:16px;
+            line-height: 16px;
+            text-align: center;
+            font-size:12px;
+            font-weight:400;
+            color:rgba(17,17,17,1);
+        }
+        .menu_child .menu_title{
+            padding:2px 10px 0 10px;
+        }
+        .active.menu_item{
+            background:#EAECEE;
+        }
+        .group_box{
+            padding-bottom:15px;
+            margin-bottom:8px;
+            background:#fff;
+        }
+        .group_title{
+            margin:0 16px;
+            padding-left: 10px;
+            position: relative;
+            font-size:16px;
+            font-weight:600;
+            color:rgba(42,48,60,1);
+            line-height:44px;
+        }
+        .group_line{
+            width:3px;
+            height:16px;
+            background:rgba(32,125,225,1);
+            position:absolute;
+            left:0;
+            top:50%;
+            margin-top:-8px;
+        }
+        .bottom_boxshadow{
+            position:fixed;
+            bottom:48px;
+            left:0;
+            right:0;
+            height:1px;
+            box-shadow:0px -2px 6px 0px rgba(0,0,0,0.05);
+        }
+        .bottom_copy_right{
+            padding-top:0px;
+            padding-bottom:12px;
+            text-align: center;
+            font-size:10px;
+            font-weight:400;
+            color:rgba(164,171,179,1);
+            line-height:14px;
+        }
+        .van-icon.van-icon-icon_wjw,
+        .van-icon.van-icon-icon_dsfw,
+        .van-icon.van-icon-icon_my{
+            width:20px;
+            height:20px;
+        }
+        .van-icon.van-icon-icon_wjw{
+            background-image: url("./images/icon_wjw_default.png");
+            background-size:100% 100%;
+            background-repeat: no-repeat no-repeat;
+            background-position: 0 0;
+        }
+        .van-tabbar-item--active .van-icon-icon_wjw{
+            background-image: url("./images/icon_wjw_active.png");
+            background-size:100% 100%;
+            background-repeat: no-repeat no-repeat;
+            background-position: 0 0;
+        }
+        .van-icon.van-icon-icon_dsfw{
+            background-image: url("./images/icon_dsfw_default.png");
+            background-size:100% 100%;
+            background-repeat: no-repeat no-repeat;
+            background-position: 0 0;
+        }
+        .van-tabbar-item--active .van-icon-icon_dsfw{
+            background-image: url("./images/icon_dsfw_active.png");
+            background-size:100% 100%;
+            background-repeat: no-repeat no-repeat;
+            background-position: 0 0;
+        }
+        .van-icon.van-icon-icon_my{
+            background-image: url("./images/icon_my_default.png");
+            background-size:100% 100%;
+            background-repeat: no-repeat no-repeat;
+            background-position: 0 0;
+        }
+        .van-tabbar-item--active .van-icon-icon_my{
+            background-image: url("./images/icon_my_active.png");
+            background-size:100% 100%;
+            background-repeat: no-repeat no-repeat;
+            background-position: 0 0;
+        }
+        .van-tabbar-item__text{
+            font-size:10px;
+        }
+        .top_menu{
+            display: flex;
+            padding:6px 12px;
+            background:#fff;
+        }
+        .top_menu_item{
+            flex:1;
+        }
+        .top_menu_img{
+            margin:0 auto;
+            height:68px;
+            width:165px;
+        }
+        .top_menu_img{
+            border-radius: 8px;
+        }
+
+        .img_1{
+            background-image: url("./images/top_menu_1.png");
+            background-size:165px 68px;
+            background-repeat: no-repeat no-repeat;
+            background-position: 0 0;
+            box-shadow:0px 4px 8px 0px rgba(12,122,253,0.3);
+        }
+        .img_2{
+            background-image: url("./images/top_menu_2.png");
+            background-size:165px 68px;
+            background-repeat: no-repeat no-repeat;
+            background-position: 0 0;
+            box-shadow:0px 4px 8px 0px rgba(12,122,253,0.3);
+        }
+        .img_3{
+            background-image: url("./images/top_menu_3.png");
+            background-size:165px 68px;
+            background-repeat: no-repeat no-repeat;
+            background-position: 0 0;
+            box-shadow:0px 4px 8px 0px rgba(12,122,253,0.3);
+        }
+        .img_4{
+            background-image: url("./images/top_menu_4.png");
+            background-size:165px 68px;
+            background-repeat: no-repeat no-repeat;
+            background-position: 0 0;
+            box-shadow:0px 4px 8px 0px rgba(12,122,253,0.3);
+        }
+        .pc_title{
+            position:absolute;
+            left:0;
+            right:0;
+            top:20px;
+            font-size:12px;
+            font-family:PingFangSC-Regular,PingFang SC;
+            font-weight:400;
+            color:rgba(255,255,255,1);
+            line-height:16px;
+            text-align: center;
+        }
+        .pc_close{
+            position:absolute;
+            font-size:14px;
+            color:rgba(255,255,255,1);
+            line-height:30px;
+            height:30px;
+            width:30px;
+            top:0;
+            right:10px;
+            text-align: right;
+        }
+        .user_center_top{
+            position:relative;
+            height:90px;
+            margin-bottom:8px;
+            background-image: url("./images/user_center_top_bg.png");
+            background-size:100% 100%;
+            background-repeat: no-repeat no-repeat;
+            background-position: 0 0;
+        }
+        .uer_center_top_photo{
+            position:absolute;
+            left:16px;
+            top:15px;
+            height:60px;
+            width:60px;
+            box-sizing: border-box;
+            border:2px solid #fff;
+            background:#E9E9EA;
+            border-radius: 60px;
+            overflow: hidden;
+        }
+        .user_center_top_box{
+            padding:15px 45px 15px 93px;
+            position:relative;
+        }
+        .uer_center_top_photo img{
+            position:absolute;
+            display: block;
+            padding:0;
+            margin:0;
+            width:100%;
+            height:100%;
+        }
+        .user_center_top_title{
+            height:20px;
+            padding-bottom:6px;
+        }
+        .user_name{
+            font-size:14px;
+            font-family:PingFangSC-Semibold,PingFang SC;
+            font-weight:600;
+            color:rgba(255,255,255,1);
+            line-height:20px;
+            padding-right:8px;
+            float:left;
+        }
+        .user_status{
+            margin:1px 0;
+            padding:0 8px;
+            border:1px solid #fff;
+            height:14px;
+            line-height: 14px;
+            font-size:10px;
+            border-radius: 2px;
+            font-family:PingFangSC-Regular,PingFang SC;
+            font-weight:400;
+            color:rgba(255,255,255,1);
+            float:left;
+        }
+        .user_process_box{
+            width:120px;
+            height:4px;
+            background:rgba(247,247,247,1);
+            border-radius:3px;
+            position:relative;
+            overflow: hidden;
+        }
+        .user_process{
+            position:absolute;
+            width:50%;
+            left:0;
+            top:0;
+            height:4px;
+            background:linear-gradient(270deg,rgba(253,216,5,1) 0%,rgba(251,176,2,1) 100%);
+            border-radius:3px;
+            position:relative;
+        }
+        .user_phone{
+            padding-top:12px;
+            font-size:12px;
+            font-family:PingFangSC-Regular,PingFang SC;
+            font-weight:400;
+            color:rgba(255,255,255,1);
+            line-height:16px;
+        }
+        .user_center_top_enter{
+            position:absolute;
+            right:16px;
+            top:50%;
+            width:16px;
+            height:16px;
+            margin-top:-8px;
+            color:#fff;
+            font-size:12px;
+            text-align: center;
+            line-height: 16px;
+        }
+    </style>
+</head>
+<body>
+<div id="app" v-cloak>
+    <div class="user_center_top">
+        <div class="uer_center_top_photo">
+            <img :src="userData.photo" alt="">
+        </div>
+        <div class="user_center_top_box">
+            <div class="user_center_top_title">
+                <div class="user_name">
+                    {{userData.username}}
+                </div>
+                <div class="user_status">{{userData.userStatus}}</div>
+            </div>
+            <div class="user_process_box">
+                <div class="user_process" :style="'width:'+userData.process"></div>
+            </div>
+            <div class="user_phone">
+                手机号：{{userData.phone}}
+            </div>
+        </div>
+        <div class="user_center_top_enter">
+            <van-icon name="arrow" />
+        </div>
+    </div>
+    <div>
+        <div v-for="(group, g) in groupList" :key="g" class="group_box">
+            <div class="group_title" v-if="group.groupName">
+                <div class="group_line"></div>
+                {{group.groupName}}
+            </div>
+            <div v-for="(itt, r) in getGroupMenuRow(g,groupList)" :key="r">
+                <van-row>
+                    <van-col v-if="group.menuList[r*step+c]" :span="parseInt(24/step)" v-for="(itt1,c) in (r===getGroupMenuRow(g,groupList)-1&&group.menuList.length%step!==0?group.menuList.length%step:step)" :key="c">
+                        <div @click="chooseMenu(g,r,c,group.menuList[r*step+c])" :class="'menu_item menu_parent ' + (openGroupIndex === g && openMenuIndex === r*step+c?'active':'')">
+                            <img class="menu_icon" :src="'./images/userCenter/'+group.menuList[r*step+c].menuName+'.png'"/>
+                            <div class="menu_title">{{group.menuList[r*step+c].menuName}}</div>
+                        </div>
+                    </van-col>
+                </van-row>
+            </div>
+        </div>
+    </div>
+
+    <div class="bottom_copy_right">
+        版权所有:菏泽市公安局<br/>
+        技术支持：山东晟厚网络科技有限公司
+    </div>
+    <div class="bottom_boxshadow"></div>
+    <van-tabbar
+        v-model="active"
+        active-color="#111111"
+        inactive-color="#A4ABB3"
+    >
+        <van-tabbar-item icon="icon_wjw" @click="go2Page('home.html')">微警务</van-tabbar-item>
+        <van-tabbar-item icon="icon_dsfw" @click="go2Page('citys.html')">地市服务</van-tabbar-item>
+        <van-tabbar-item icon="icon_my">个人中心</van-tabbar-item>
+    </van-tabbar>
+</div>
+</body>
+
+
+
+<script>
+    var Vue = window.Vue;
+    var vant = window.vant;
+
+    Vue.use(vant.Lazyload);
+
+    new Vue({
+        el: '#app',
+        data: function() {
+            return {
+                userData: {
+                    username: '王正义',
+                    userStatus: '已实名认证',
+                    phone: '15644455660',
+                    process: '50%',
+                    photo: 'images/icon_my_active.png'
+                },
+                step: 4,
+                rowLength: 0,
+                openMenuIndex: -1,
+                openGroupIndex: -1,
+                groupList: [{
+                    groupName: '我的微信息',
+                    menuList: [{
+                        menuName: '身份证信息',
+                        type: 'isLink',
+                        link: 'a',
+                        children: []
+                    }, {
+                        menuName: '我的驾驶证',
+                        type: 'isLink',
+                        link: 'a',
+                        children: []
+                    }, {
+                        menuName: '行驶证信息',
+                        type: 'isLink',
+                        link: 'a',
+                        children: []
+                    }, {
+                        menuName: '我的机动车',
+                        type: 'isLink',
+                        link: 'a',
+                        children: []
+                    }]
+                },{
+                    groupName: '我的微服务',
+                    menuList: [{
+                        menuName: '我的办件',
+                        type: 'isLink',
+                        link: 'a',
+                        children: []
+                    }, {
+                        menuName: '我的诉求',
+                        type: 'isLink',
+                        link: 'a',
+                        children: []
+                    }, {
+                        menuName: '我的评价',
+                        type: 'isLink',
+                        link: 'a',
+                        children: []
+                    }, {
+                        menuName: '我的消息',
+                        type: 'isLink',
+                        link: 'a',
+                        children: []
+                    }, {
+                        menuName: '我的邮寄',
+                        type: 'isLink',
+                        link: 'a',
+                        children: []
+                    }, {
+                        menuName: '我的支付',
+                        type: 'isLink',
+                        link: 'a',
+                        children: []
+                    }, {
+                        menuName: '我的举报',
+                        type: 'isLink',
+                        link: 'a',
+                        children: []
+                    }, {
+                        menuName: '我的局长信箱',
+                        type: 'isLink',
+                        link: 'a',
+                        children: []
+                    }, {
+                        menuName: '我的证明',
+                        type: 'isLink',
+                        link: 'a',
+                        children: []
+                    }]
+                }],
+                images: [
+                    'images/banner1.png'
+                ],
+                itl: undefined,
+                active: 2,
+                zoom: 1
+            }
+        },
+        created() {
+            const windowWidth = window.screen.width
+            this.zoom = windowWidth / 375
+        },
+        mounted() {
+        },
+        methods: {
+            go2Page(url) {
+                window.location.href = url
+            },
+
+            getGroupMenuRow(g,groupList) {
+                const rowLength = groupList[g].menuList.length % this.step ===0 ? parseInt(groupList[g].menuList.length / this.step) : (parseInt(groupList[g].menuList.length / this.step) + 1)
+                return rowLength
+            },
+            chooseMenu(g, r, c, item) {
+                if (g === this.openGroupIndex && this.openMenuIndex === r * this.step + c) {
+                    this.openGroupIndex = -1
+                    this.openMenuIndex = -1
+                } else {
+                    this.openGroupIndex = g
+                    this.openMenuIndex = r * this.step + c
+                }
+                this.menuClickEvent(item)
+            },
+            menuClickEvent(item) {
+                if (item.type === 'isLink') {
+                    alert('点击菜单'+ item.menuName + '，链接为：' + item.link)
+                }
+            },
+        }
+    })
+</script>
+</html>
